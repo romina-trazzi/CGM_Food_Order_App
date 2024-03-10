@@ -116,8 +116,6 @@ function App() {
           ))} 
   
         </MealContainer>
-       
-
       </Main>
       <Footer>Final Project CGM React Course. Made by ~ Romina Trazzi - 2024 ~</Footer>
     </>

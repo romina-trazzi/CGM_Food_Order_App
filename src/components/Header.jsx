@@ -36,9 +36,20 @@ function Header() {
         modal.current.open();
     }
 
+    let modalActions = <button>Close</button>;
+
+    if (itemQuantity > 0) {
+        modalActions = (
+        <>
+        <button>Close</button>
+        <button>Go to Checkout</button>
+        </>
+        )
+    };
+
   return (
     <>
-      <CartModal ref={modal} title="Your Cart"/>
+      <CartModal ref={modal} title="Your Cart" actions={modalActions}/>
       <HeaderStyle>
         <div style={{display: "flex", alignItems: "center"}}>
             <Logo src="logo.jpg" alt="Logo"/>
