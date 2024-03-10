@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import ShoppingCart from './ShoppingCart.jsx'
+import CartModal from './CartModal.jsx';
 
 
 export const HeaderStyle = styled.header `
@@ -26,20 +27,27 @@ export const Title = styled.span`
 
 `
 
-
 function Header() {
     
     const [itemQuantity, setItemQuantity] = useState(0);
+    const modal = useRef();
 
+    function handleOpenCart() {
+        modal.current.open();
+    }
 
   return (
-    <HeaderStyle>
+    <>
+      <CartModal ref={modal} title="Your Cart"/>
+      <HeaderStyle>
         <div style={{display: "flex", alignItems: "center"}}>
             <Logo src="logo.jpg" alt="Logo"/>
             <Title>REACTFOOD</Title>
         </div>
-        <ShoppingCart quantity={itemQuantity}> Cart: {itemQuantity} </ShoppingCart>
-    </HeaderStyle>
+        <ShoppingCart onOpenCart={handleOpenCart}> Cart ({itemQuantity}) </ShoppingCart>
+        </HeaderStyle>
+    </>
+    
   )
 }
 

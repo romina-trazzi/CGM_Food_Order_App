@@ -77,8 +77,11 @@ function App() {
     const fetchData = async () => {
       try {
         const mealsData = await fetchMeals();
-        setMeals(mealsData);
-        console.log(meals);
+        setMeals(prev => {
+          // Adding a quantity property settled to 0
+          const updatedMeals = mealsData.map(meal => ({...meal, quantity: 0}));
+          return updatedMeals;  
+        });
       } catch (error) {
         console.error('Error fetching meals:', error);
       }
@@ -87,12 +90,15 @@ function App() {
     fetchData();
   }, []);
 
+  // Adding new meal to the shopping cart
+  const handleAddMealToCart = (selectedMeal) => {
+    console.log(selectedMeal);
+  };
 
   return (
     <>
       <Header/>
       <Main>
-        
         <MealContainer>
           
           {meals.map(meal => (
@@ -104,7 +110,7 @@ function App() {
                   <p>$ {meal.price}</p>
                 </div>
                 <p style={{minHeight: '3rem'}}>{meal.description}</p>
-                <MealButton>Add to cart</MealButton>
+                <MealButton onClick={() => handleAddMealToCart(meal)}>Add to cart</MealButton>
               </MealData>
             </MealCard>
           ))} 
