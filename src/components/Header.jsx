@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useRef } from 'react'
-import ShoppingCart from './ShoppingCart.jsx'
+import ShoppingCartBtn from './ShoppingCartBtn.jsx'
 import CartModal from './CartModal.jsx';
 
 
@@ -57,7 +57,7 @@ function Header({itemQuantity}) {
             <Logo src="logo.jpg" alt="Logo"/>
             <Title>REACTFOOD</Title>
         </div>
-        <ShoppingCart onOpenCart={handleOpenCart}> Cart ({itemQuantity}) </ShoppingCart>
+        <ShoppingCartBtn onOpenCart={handleOpenCart}> Cart ({itemQuantity}) </ShoppingCartBtn>
         </HeaderStyle>
     </>
     

@@ -5,13 +5,15 @@ import { createContext, useReducer } from "react";
 all'interno un componente React (cioè CartContextProvider).
 
 1. Creiamo il Context */
-
 export const CartContext = createContext(
     { items: [],
     addItemToCart: () => {},
     updateItemQuantity: () => {},
   }
 );
+
+/* Nota: Aver impostato item, addItemToCart e updateItemQuantity serve per l'autocomplete con dot notation quando puntiamo 
+poi ctxValue nei componenti figli. Se non li mettiamo l'applicazione funziona lo stesso ma diventa più difficile */
 
 function shoppingCartReducer(state, action) {
 
@@ -79,10 +81,6 @@ export default function CartContextProvider(props) {
     
   // Il primo valore è la funzione fuori dal componente, l'altro è il valore di default dello stato che è opzionale 
   const [shoppingCartState, shoppingCartDispatch] = useReducer(shoppingCartReducer, {items: []});
-  
-  // const [shoppingCart, setShoppingCart] = useState({
-  //   items: [],
-  // });
 
   function handleAddItemToCart(id) {
 
@@ -91,8 +89,6 @@ export default function CartContextProvider(props) {
       payload_id: id
     })
 
-    // setShoppingCart((prevShoppingCart) => {
-     
   }
 
   function handleUpdateCartItemQuantity(productId, amount) {
@@ -104,12 +100,9 @@ export default function CartContextProvider(props) {
         amount: amount
       }
     })
-
-    // setShoppingCart((prevShoppingCart) => {
-
   }
 
-  
+
 
   const ctxValue = {
     items: shoppingCartState.items,
@@ -125,8 +118,3 @@ export default function CartContextProvider(props) {
 }
 
 
-/* Aver impostato item, addItemToCart e updateItemQuantity 
-serve per l'autocomplete con dot notation quando puntiamo 
-poi ctxValue nei componenti figli.
-Se non li mettiamo l'applicazione funziona lo stesso
-ma diventa più difficile */

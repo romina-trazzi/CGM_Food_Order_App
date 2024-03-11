@@ -10,11 +10,11 @@ export const ShoppingCartButton = styled.button`
   cursor: pointer;
 `
 
-function ShoppingCart({onOpenCart, children}) {
+function ShoppingCartBtn({onOpenCart, children}) {
  
   return (
     <ShoppingCartButton onClick={onOpenCart}>{children}</ShoppingCartButton>
   )
 }
 
-export default ShoppingCart
+export default ShoppingCartBtn
