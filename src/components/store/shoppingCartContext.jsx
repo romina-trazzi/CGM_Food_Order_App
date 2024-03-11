@@ -8,7 +8,7 @@ export const CartContext = createContext(
     { 
         meals: [],
         addItemToCart: () => {},
-        updateItemQuantity: () => {},
+        updateMealQuantity: () => {},
     }
 );
 
@@ -52,7 +52,10 @@ function shoppingCartReducer(state, action) {
     }      
 
     if (action.type === 'UPDATE_MEAL') {
-       const { productId, amount } = action.payload;
+       
+        // Destructuring payload
+        const { productId, amount } = action.payload;
+        
         const updatedMeals = state.meals.map(meal =>
             meal.id === productId ? { ...meal, quantity: amount } : meal
         );
@@ -104,7 +107,7 @@ export default function CartContextProvider({meals, children}) {
     const ctxValue = {
         meals: shoppingCartState.meals,
         addItemToCart: handleAddItemToCart,
-        updateItemQuantity: handleUpdateCartItemQuantity,
+        updateMealQuantity: handleUpdateCartItemQuantity,
     }
 
     return (

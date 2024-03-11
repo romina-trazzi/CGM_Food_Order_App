@@ -7,13 +7,15 @@ export const MealList = styled.ul `
   list-style-type: none;
 `
 
+
 function Cart() {
   const { meals, updateMealQuantity } = useContext(CartContext);
 
   const totalPrice = meals.reduce(
-    (acc, meal) => acc + meal.price * meal.quantity,
-    0
+    (acc, meal) => acc + meal.price * meal.quantity, 0
   );
+
+  const formattedTotalPrice = `$${totalPrice.toFixed(2)}`;
   
   return (
     <div>
@@ -39,7 +41,7 @@ function Cart() {
         </MealList>
       )}
       <p>
-        Cart Total: <strong>{totalPrice}</strong>
+        Cart Total: <strong>{formattedTotalPrice}</strong>
       </p>
     </div>
   )
@@ -47,6 +49,3 @@ function Cart() {
 
 export default Cart
 
-// const formattedTotalPrice = `$${totalPrice.toFixed(2)}`;
-// const formattedPrice = meal.price.toFixed(2);
-// console.log(formattedPrice);
