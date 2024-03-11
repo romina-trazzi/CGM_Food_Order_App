@@ -1,7 +1,8 @@
 import styled from 'styled-components';
-import { useRef } from 'react'
+import { useRef, useContext } from 'react'
 import ShoppingCartBtn from './ShoppingCartBtn.jsx'
 import CartModal from './CartModal.jsx';
+import { CartContext } from './store/shoppingCartContext.jsx';
 
 
 export const HeaderStyle = styled.header `
@@ -27,7 +28,10 @@ export const Title = styled.span`
 
 `
 
-function Header({itemQuantity}) {
+function Header() {
+
+    const { meals } = useContext(CartContext);
+    const cartMealsQuantity = meals.length;
     
     const modal = useRef();
 
@@ -40,7 +44,7 @@ function Header({itemQuantity}) {
     // Setting modal action buttons
     let modalActions = <button>Close</button>;
 
-    if (itemQuantity > 0) {
+    if (cartMealsQuantity > 0) {
         modalActions = (
         <>
         <button>Close</button>
@@ -57,7 +61,7 @@ function Header({itemQuantity}) {
             <Logo src="logo.jpg" alt="Logo"/>
             <Title>REACTFOOD</Title>
         </div>
-        <ShoppingCartBtn onOpenCart={handleOpenCart}> Cart ({itemQuantity}) </ShoppingCartBtn>
+        <ShoppingCartBtn onOpenCart={handleOpenCart}> Cart ({cartMealsQuantity}) </ShoppingCartBtn>
         </HeaderStyle>
     </>
     

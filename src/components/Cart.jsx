@@ -8,17 +8,13 @@ export const MealList = styled.ul `
 `
 
 function Cart() {
-  const { meals, updateItemQuantity } = useContext(CartContext);
-
-  // const {id, name, price, description, quantity, image} = meals
+  const { meals, updateMealQuantity } = useContext(CartContext);
 
   const totalPrice = meals.reduce(
     (acc, meal) => acc + meal.price * meal.quantity,
     0
   );
-  // const formattedTotalPrice = `$${totalPrice.toFixed(2)}`;
-
-
+  
   return (
     <div>
       {meals.length === 0 && <p>No items in cart!</p>}
@@ -26,19 +22,16 @@ function Cart() {
         <MealList>
           {meals.map((meal) => {
 
-            // const formattedPrice = meal.price.toFixed(2);
-            // console.log(formattedPrice);
-
             return (
               <li key={meal.id}>
                 <div>
                   <span>{meal.name}</span>
-                  {/* <span> ({formattedPrice})</span>  */}
+                  <span> ({meal.price})</span> 
                 </div>
                 <div>
-                  <button onClick={() => updateItemQuantity(meal.id, -1)}> - </button>
+                  <button onClick={() => updateMealQuantity(meal.id, -1)}> - </button>
                   <span>{meal.quantity}</span>
-                  <button onClick={() => updateItemQuantity(meal.id, 1)}> + </button>
+                  <button onClick={() => updateMealQuantity(meal.id, 1)}> + </button>
                 </div>
               </li>
             );
@@ -54,4 +47,6 @@ function Cart() {
 
 export default Cart
 
-
+// const formattedTotalPrice = `$${totalPrice.toFixed(2)}`;
+// const formattedPrice = meal.price.toFixed(2);
+// console.log(formattedPrice);
