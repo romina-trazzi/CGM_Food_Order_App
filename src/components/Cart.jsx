@@ -3,19 +3,19 @@ import { CartContext } from './store/shoppingCartContext.jsx';
 import styled from 'styled-components'
 
 
-
 export const MealList = styled.ul `
   list-style-type: none;
 `
 
-
 function Cart() {
   const { meals, updateItemQuantity } = useContext(CartContext);
 
-  // const totalPrice = meals.reduce(
-  //   (acc, meal) => acc + meal.price * meal.quantity,
-  //   0
-  // );
+  // const {id, name, price, description, quantity, image} = meals
+
+  const totalPrice = meals.reduce(
+    (acc, meal) => acc + meal.price * meal.quantity,
+    0
+  );
   // const formattedTotalPrice = `$${totalPrice.toFixed(2)}`;
 
 
@@ -23,33 +23,30 @@ function Cart() {
     <div>
       {meals.length === 0 && <p>No items in cart!</p>}
       {meals.length > 0 && (
-        <MealList id="cart-items">
+        <MealList>
           {meals.map((meal) => {
-            // const formattedPrice = `$${meal.price.toFixed(2)}`;
+
+            // const formattedPrice = meal.price.toFixed(2);
+            // console.log(formattedPrice);
 
             return (
               <li key={meal.id}>
                 <div>
                   <span>{meal.name}</span>
-                  {/* <span> ({formattedPrice})</span> */}
+                  {/* <span> ({formattedPrice})</span>  */}
                 </div>
-                <div className="cart-item-actions">
-                  <button onClick={() => updateItemQuantity(meal.id, -1)}>
-                    -
-                  </button>
+                <div>
+                  <button onClick={() => updateItemQuantity(meal.id, -1)}> - </button>
                   <span>{meal.quantity}</span>
-                  <button onClick={() => updateItemQuantity(meal.id, 1)}>
-                    +
-                  </button>
+                  <button onClick={() => updateItemQuantity(meal.id, 1)}> + </button>
                 </div>
               </li>
             );
           })}
         </MealList>
       )}
-      <p id="cart-total-price">
-        {/* Cart Total: <strong>{formattedTotalPrice}</strong> */}
-        Cart Total: PriceHardcoded
+      <p>
+        Cart Total: <strong>{totalPrice}</strong>
       </p>
     </div>
   )

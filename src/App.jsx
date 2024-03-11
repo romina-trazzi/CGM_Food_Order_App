@@ -1,8 +1,8 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import { fetchMeals } from './http.js'
 import styled from 'styled-components';
 import Header from './components/Header.jsx'
-import { CartContext } from './components/store/shoppingCartContext.jsx';
+import Meal from './components/Meal.jsx'
 import CartContextProvider from './components/store/shoppingCartContext.jsx';
 
 export const Main = styled.main `
@@ -15,44 +15,6 @@ export const MealContainer = styled.div`
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(7, 1fr);
   gap: 1rem;
-`
-export const MealCard = styled.div`
- display: flex;
- flex-direction: column;
- height: max-content;
- border: 1px solid black;
- border-radius: 30px;
- background-color: rgba(30, 30, 30, 0.8);
-`
-export const MealImg = styled.img`
-  width: 100%;
-  border-radius: 30px;
-`
-export const MealData = styled.div`
-  width: 100%;
-  height: 20rem;
-  text-align: center;
-  padding: 1rem;
-
-  & div {
-    display: flex;
-    justify-content: center;
-
-    & p {
-      padding: 0.6rem 2rem;
-      color: gold; 
-      background-color: rgba(51, 51, 51, 0.8);
-      border-radius: 0.5rem;
-    }
-  }
-
-`
-export const MealButton = styled.button`
-  background-color: gold;
-  width: 30%;
-  border-radius: 5px;
-  padding: 0.5rem;
-  margin-top: 2rem;
 `
 export const Footer = styled.footer `
  background-color: black;
@@ -86,37 +48,14 @@ function App() {
   }, []);
 
   const [meals, setMeals] = useState([]);
-  const [itemQuantity, setItemQuantity] = useState(0);
-  
-  // Consuming useContext inside this component
-  const { addItemToCart } = useContext(CartContext);
-
-
-  // Adding new meal to the shopping cart
-  const handleAddMealToCart = (selectedMeal) => {
-    addItemToCart(selectedMeal);
-    setItemQuantity(itemQuantity + 1)
-  };
 
   return (
-    <CartContextProvider>
+    <CartContextProvider meals={meals}>
 
-      <Header itemQuantity={itemQuantity}/>
+      <Header/>
       <Main>
         <MealContainer>
-          {meals.map(meal => (
-            <MealCard key={meal.id}>
-              <MealImg src={`/backend/public/${meal.image}`}></MealImg>
-              <MealData>
-                <p><b>{meal.name}</b></p>
-                <div>
-                  <p>$ {meal.price}</p>
-                </div>
-                <p style={{minHeight: '3rem'}}>{meal.description}</p>
-                <MealButton onClick={() => handleAddMealToCart(meal)}>Add to cart</MealButton>
-              </MealData>
-            </MealCard>
-          ))} 
+         <Meal meals={meals}/>
         </MealContainer>
       </Main>
       <Footer>Final Project CGM React Course. Made by ~ Romina Trazzi - 2024 ~</Footer>
