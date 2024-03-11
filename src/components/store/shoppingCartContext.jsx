@@ -1,18 +1,20 @@
-import { createContext, useReducer } from "react";
+import { createContext, useReducer, useEffect, useState } from "react";
+import { fetchMeals } from '../../http.js';
+
 
 /* Trattiamo la variabile CartContext come un oggetto che ha
-all'interno un componente React (cioè CartContextProvider).
+all'interno un componente React.
 
-1. Creiamo il Context */
+1. Creiamo il Context (da esportare destrutturato nei componenti figli) */
 export const CartContext = createContext(
-    { items: [],
-    addItemToCart: () => {},
-    updateItemQuantity: () => {},
-    removeItemFromCart: () => {}
-  }
+    { 
+        meals: [],
+        addItemToCart: () => {},
+        updateItemQuantity: () => {},
+    }
 );
 
-/* Nota: Aver impostato item, addItemToCart, updateItemQuantity e removeItemFromCart serve per l'autocomplete con dot notation 
+/* Nota: Aver impostato meal, addItemToCart, updateItemQuantity e removeItemFromCart serve per l'autocomplete con dot notation 
 quando puntiamo poi ctxValue nei componenti figli. 
 Se non li mettiamo l'applicazione funziona lo stesso ma diventa più difficile */
 
@@ -20,53 +22,87 @@ Se non li mettiamo l'applicazione funziona lo stesso ma diventa più difficile *
 // 2. Definiamo la funzione Reducer --> Funzioni di aggiornamento dello stato (come se fossero setState)
 function shoppingCartReducer(state, action) {
 
-  if (action.type === 'ADD_ITEM') {
-    // const updatedMeals = prev.map((meal) => {
-    //       if (meal.id === selectedMeal.id) {
-    //         return { ...meal, quantity: meal.quantity + 1 };
-    //       }
-    //       setChosenMeals (prev => [...prev, updatedMeals]);
-    //       return meal;
-    //     });
-    //     return updatedMeals;
-    //   });
-
+    if (action.type === 'ADD_MEAL') {
     
-    return {
-      /* al return sempre meglio dare uno state 
-      per essere certi di avere l'ultimo stato aggiornato */
-      ...state, 
-      items: updatedItems,
-    };
-  }
+        const selectedMeal = action.payload;
+        
+        const existingMeal = state.meals.find(meal => meal.id === selectedMeal.id);
 
+        if (existingMeal) {
+        
+            // Se il pasto esiste già nel carrello, aumenta solo la quantità
+            const updatedMeals = state.meals.map(meal =>
+            meal.id === selectedMeal.id ? { ...meal, quantity: meal.quantity + 1 } : meal
+        );
 
-  if (action.type === 'UPDATE_ITEM') {
+        return {
+            ...state,
+            meals: updatedMeals
+        };
 
+        } else {
+            // Se il pasto non esiste nel carrello, aggiungilo con la quantità 1
+            return {
+                ...state,
+                meals: [...state.meals, { ...selectedMeal, quantity: 1 }]
+            };
+        }
+    }      
 
-    return {
-      ...state,
-      items: updatedItems,
-    };
+    if (action.type === 'UPDATE_MEAL') {
+       const { productId, amount } = action.payload;
+        const updatedMeals = state.meals.map(meal =>
+            meal.id === productId ? { ...meal, quantity: amount } : meal
+        );
 
-  } 
+        return {
+            ...state,
+            meals: updatedMeals
+        };
+
+    } 
 
 }
 
-// 3. Leghiamo la funzione Reducer al Context con il componente CartContextProvider
+// 3. Leghiamo la funzione Reducer al Context tramite CartContextProvider
 export default function CartContextProvider(props) {
+    const [meals, setMeals] = useState([]);
     
-    /* 3.1. UseReducerDichiarato: 
+    // Getting initial meals data
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+            const mealsData = await fetchMeals();
+            setMeals(prev => {
+                // Adding a quantity property settled to 0
+                const updatedMeals = mealsData.map(meal => ({...meal, quantity: 0}));
+                return updatedMeals;  
+            });
+            } catch (error) {
+            console.error('Error fetching meals:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+   
+    
+    /* 3.1. 
+    a) ShoppingCartState = i dati che vanno manipolati 
+    b) ShoppingCartDispatch = la funzione che racchiude i metodi che manipolano lo stato dei dati grazie allo useReducer e alle sue action
+
+    /* 3.2. UseReducerDichiarato: 
     a) Il primo valore è la funzione fuori dal componente
-    b) l'altro è il valore di default dello stato che è opzionale  */
+    b) l'altro è il valore di default dello stato (cioè dei dati) che è opzionale  */
 
-    const [shoppingCartState, shoppingCartDispatch] = useReducer(shoppingCartReducer, {items: []});
+    const [shoppingCartState, shoppingCartDispatch] = useReducer(shoppingCartReducer, {meals: [meals]});
 
-    function handleAddItemToCart(id) {
+    function handleAddItemToCart(selectedMeal) {
 
         shoppingCartDispatch({
-        type: 'ADD_ITEM',
-        payload: id
+        type: 'ADD_MEAL',
+        payload: selectedMeal
         })
 
     }
@@ -74,7 +110,7 @@ export default function CartContextProvider(props) {
     function handleUpdateCartItemQuantity(productId, amount) {
 
         shoppingCartDispatch({
-        type: 'UPDATE_ITEM',
+        type: 'UPDATE_MEAL',
         payload: { 
             productId: productId, 
             amount: amount
@@ -84,14 +120,14 @@ export default function CartContextProvider(props) {
 
     // 3.2 Creiamo un oggetto di raccolta dei dati e delle funzioni che saranno accessibili da tutti i componenti figli
     const ctxValue = {
-        items: shoppingCartState.items,
+        meals: shoppingCartState.meals,
         addItemToCart: handleAddItemToCart,
         updateItemQuantity: handleUpdateCartItemQuantity,
     }
 
     return (
 
-        // 5. Il componente wrapper CartContex (grazie alla sua proprietà Provider) con una singola props ctxValue racchiude tutto
+        // 3.3. Il componente wrapper CartContext (grazie alla sua proprietà Provider) con una singola props ctxValue racchiude tutto
         <CartContext.Provider value={ctxValue}>
             {props.children}
         </CartContext.Provider>
