@@ -1,7 +1,8 @@
-import {useState, useEffect} from 'react'
-import {fetchMeals} from './http.js'
+import { useState, useEffect } from 'react'
+import { fetchMeals } from './http.js'
 import styled from 'styled-components';
 import Header from './components/Header.jsx'
+import CartContextProvider from './components/store/shoppingCartContext.jsx';
 
 export const Main = styled.main `
   display: flex;
@@ -67,7 +68,6 @@ function App() {
 
   const [meals, setMeals] = useState([]);
   const [itemQuantity, setItemQuantity] = useState(0);
-  const [chosenMeals, setChosenMeals] = useState([]);
 
   // Getting initial meals data
   useEffect(() => {
@@ -89,23 +89,16 @@ function App() {
 
   // Adding new meal to the shopping cart
   const handleAddMealToCart = (selectedMeal) => {
-    setMeals((prev) =>  {
-      const updatedMeals = prev.map((meal) => {
-        if (meal.id === selectedMeal.id) {
-          return { ...meal, quantity: meal.quantity + 1 };
-        }
-        setChosenMeals (prev => [...prev, updatedMeals]);
-        return meal;
-      });
-      return updatedMeals;
-    });
+
   
     setItemQuantity(itemQuantity + 1)
+ 
   };
 
   return (
-    <>
-      <Header itemQuantity={itemQuantity} chosenMeals={chosenMeals}/>
+    <CartContextProvider>
+
+      <Header itemQuantity={itemQuantity}/>
       <Main>
         <MealContainer>
           {meals.map(meal => (
@@ -124,7 +117,9 @@ function App() {
         </MealContainer>
       </Main>
       <Footer>Final Project CGM React Course. Made by ~ Romina Trazzi - 2024 ~</Footer>
-    </>
+
+    </CartContextProvider>
+    
   );
 }
 

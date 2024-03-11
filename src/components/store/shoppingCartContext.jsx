@@ -1,6 +1,5 @@
 import { createContext, useReducer } from "react";
 
-
 /* Trattiamo la variabile CartContext come un oggetto che ha
 all'interno un componente React (cioè CartContextProvider).
 
@@ -9,37 +8,29 @@ export const CartContext = createContext(
     { items: [],
     addItemToCart: () => {},
     updateItemQuantity: () => {},
+    removeItemFromCart: () => {}
   }
 );
 
-/* Nota: Aver impostato item, addItemToCart e updateItemQuantity serve per l'autocomplete con dot notation quando puntiamo 
-poi ctxValue nei componenti figli. Se non li mettiamo l'applicazione funziona lo stesso ma diventa più difficile */
+/* Nota: Aver impostato item, addItemToCart, updateItemQuantity e removeItemFromCart serve per l'autocomplete con dot notation 
+quando puntiamo poi ctxValue nei componenti figli. 
+Se non li mettiamo l'applicazione funziona lo stesso ma diventa più difficile */
 
+
+// 2. Definiamo la funzione Reducer --> Funzioni di aggiornamento dello stato (come se fossero setState)
 function shoppingCartReducer(state, action) {
 
   if (action.type === 'ADD_ITEM') {
-    const updatedItems = [...state.items];
-    const existingCartItemIndex = updatedItems.findIndex(
-      (cartItem) => cartItem.id === action.payload_id
-    );
-    const existingCartItem = updatedItems[existingCartItemIndex];
+    // const updatedMeals = prev.map((meal) => {
+    //       if (meal.id === selectedMeal.id) {
+    //         return { ...meal, quantity: meal.quantity + 1 };
+    //       }
+    //       setChosenMeals (prev => [...prev, updatedMeals]);
+    //       return meal;
+    //     });
+    //     return updatedMeals;
+    //   });
 
-    if (existingCartItem) {
-      const updatedItem = {
-        ...existingCartItem,
-        quantity: existingCartItem.quantity + 1,
-      };
-      updatedItems[existingCartItemIndex] = updatedItem;
-      
-    } else {
-      const product = DUMMY_PRODUCTS.find((product) => product.id === action.payload_id);
-      updatedItems.push({
-        id: action.payload_id,
-        name: product.title,
-        price: product.price,
-        quantity: 1,
-      });
-    }
     
     return {
       /* al return sempre meglio dare uno state 
@@ -49,24 +40,9 @@ function shoppingCartReducer(state, action) {
     };
   }
 
+
   if (action.type === 'UPDATE_ITEM') {
 
-    const updatedItems = [...state.items];
-    const updatedItemIndex = updatedItems.findIndex(
-      (item) => item.id === action.payload_id.productId
-    );
-
-    const updatedItem = {
-      ...updatedItems[updatedItemIndex],
-    };
-
-    updatedItem.quantity += action.payload_id.amount;
-
-    if (updatedItem.quantity <= 0) {
-      updatedItems.splice(updatedItemIndex, 1);
-    } else {
-      updatedItems[updatedItemIndex] = updatedItem;
-    }
 
     return {
       ...state,
@@ -74,47 +50,53 @@ function shoppingCartReducer(state, action) {
     };
 
   } 
+
 }
 
-
+// 3. Leghiamo la funzione Reducer al Context con il componente CartContextProvider
 export default function CartContextProvider(props) {
     
-  // Il primo valore è la funzione fuori dal componente, l'altro è il valore di default dello stato che è opzionale 
-  const [shoppingCartState, shoppingCartDispatch] = useReducer(shoppingCartReducer, {items: []});
+    /* 3.1. UseReducerDichiarato: 
+    a) Il primo valore è la funzione fuori dal componente
+    b) l'altro è il valore di default dello stato che è opzionale  */
 
-  function handleAddItemToCart(id) {
+    const [shoppingCartState, shoppingCartDispatch] = useReducer(shoppingCartReducer, {items: []});
 
-    shoppingCartDispatch({
-      type: 'ADD_ITEM',
-      payload_id: id
-    })
+    function handleAddItemToCart(id) {
 
-  }
+        shoppingCartDispatch({
+        type: 'ADD_ITEM',
+        payload: id
+        })
 
-  function handleUpdateCartItemQuantity(productId, amount) {
+    }
 
-    shoppingCartDispatch({
-      type: 'UPDATE_ITEM',
-      payload_id: { 
-        productId: productId, 
-        amount: amount
-      }
-    })
-  }
+    function handleUpdateCartItemQuantity(productId, amount) {
 
+        shoppingCartDispatch({
+        type: 'UPDATE_ITEM',
+        payload: { 
+            productId: productId, 
+            amount: amount
+        }
+        })
+    }
 
+    // 3.2 Creiamo un oggetto di raccolta dei dati e delle funzioni che saranno accessibili da tutti i componenti figli
+    const ctxValue = {
+        items: shoppingCartState.items,
+        addItemToCart: handleAddItemToCart,
+        updateItemQuantity: handleUpdateCartItemQuantity,
+    }
 
-  const ctxValue = {
-    items: shoppingCartState.items,
-    addItemToCart: handleAddItemToCart,
-    updateItemQuantity: handleUpdateCartItemQuantity,
-  }
+    return (
 
-  return (
-    <CartContext.Provider value={ctxValue}>
-      {props.children}
-    </CartContext.Provider>
-  )
+        // 5. Il componente wrapper CartContex (grazie alla sua proprietà Provider) con una singola props ctxValue racchiude tutto
+        <CartContext.Provider value={ctxValue}>
+            {props.children}
+        </CartContext.Provider>
+    )
+
 }
 
 
