@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
 import ShoppingCart from './ShoppingCart.jsx'
 import CartModal from './CartModal.jsx';
 
@@ -27,15 +27,17 @@ export const Title = styled.span`
 
 `
 
-function Header() {
+function Header({itemQuantity}) {
     
-    const [itemQuantity, setItemQuantity] = useState(0);
     const modal = useRef();
 
+    // Opening the shopping cart modal
     function handleOpenCart() {
+        // Richiamiamo la funzione open() del componente CartModal tramite il riferimento
         modal.current.open();
     }
 
+    // Setting modal action buttons
     let modalActions = <button>Close</button>;
 
     if (itemQuantity > 0) {
@@ -49,8 +51,8 @@ function Header() {
 
   return (
     <>
-      <CartModal ref={modal} title="Your Cart" actions={modalActions}/>
-      <HeaderStyle>
+        <CartModal ref={modal} title="Your Cart" actions={modalActions}/>
+        <HeaderStyle>
         <div style={{display: "flex", alignItems: "center"}}>
             <Logo src="logo.jpg" alt="Logo"/>
             <Title>REACTFOOD</Title>
@@ -63,3 +65,4 @@ function Header() {
 }
 
 export default Header
+

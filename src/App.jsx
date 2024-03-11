@@ -7,7 +7,6 @@ export const Main = styled.main `
   display: flex;
   justify-content: center;
 `
-
 export const MealContainer = styled.div`
   width: 70%;
   display: grid;
@@ -15,7 +14,6 @@ export const MealContainer = styled.div`
   grid-template-rows: repeat(7, 1fr);
   gap: 1rem;
 `
-
 export const MealCard = styled.div`
  display: flex;
  flex-direction: column;
@@ -24,12 +22,10 @@ export const MealCard = styled.div`
  border-radius: 30px;
  background-color: rgba(30, 30, 30, 0.8);
 `
-
 export const MealImg = styled.img`
   width: 100%;
   border-radius: 30px;
 `
-
 export const MealData = styled.div`
   width: 100%;
   height: 20rem;
@@ -49,7 +45,6 @@ export const MealData = styled.div`
   }
 
 `
-
 export const MealButton = styled.button`
   background-color: gold;
   width: 30%;
@@ -71,6 +66,8 @@ export const Footer = styled.footer `
 function App() {
 
   const [meals, setMeals] = useState([]);
+  const [itemQuantity, setItemQuantity] = useState(0);
+  const [chosenMeals, setChosenMeals] = useState([]);
 
   // Getting initial meals data
   useEffect(() => {
@@ -92,15 +89,25 @@ function App() {
 
   // Adding new meal to the shopping cart
   const handleAddMealToCart = (selectedMeal) => {
-    console.log(selectedMeal);
+    setMeals((prev) =>  {
+      const updatedMeals = prev.map((meal) => {
+        if (meal.id === selectedMeal.id) {
+          return { ...meal, quantity: meal.quantity + 1 };
+        }
+        setChosenMeals (prev => [...prev, updatedMeals]);
+        return meal;
+      });
+      return updatedMeals;
+    });
+  
+    setItemQuantity(itemQuantity + 1)
   };
 
   return (
     <>
-      <Header/>
+      <Header itemQuantity={itemQuantity} chosenMeals={chosenMeals}/>
       <Main>
         <MealContainer>
-          
           {meals.map(meal => (
             <MealCard key={meal.id}>
               <MealImg src={`/backend/public/${meal.image}`}></MealImg>
@@ -114,7 +121,6 @@ function App() {
               </MealData>
             </MealCard>
           ))} 
-  
         </MealContainer>
       </Main>
       <Footer>Final Project CGM React Course. Made by ~ Romina Trazzi - 2024 ~</Footer>
