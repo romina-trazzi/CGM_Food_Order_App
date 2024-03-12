@@ -27,6 +27,38 @@ export const Title = styled.span`
     font-size: 1.5rem;
 
 `
+export const ModalActions = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+`
+export const CheckoutButton = styled.button`
+    font: inherit;
+    cursor: pointer;
+    background-color: #ffc404;
+    border: 1px solid #ffc404;
+    color: #1f1a09;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+
+    &:hover, &:active {
+        background-color: #ffab04;
+        border-color: #ffab04;
+        color: #1f1a09;
+    }
+`
+export const CloseModalButton = styled.button`
+    font: inherit;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    color: #1d1a16;
+
+    &:hover, &:active {
+        color: #312c1d;
+    }
+
+`
 
 function Header() {
 
@@ -42,14 +74,14 @@ function Header() {
     }
 
     // Setting modal action buttons
-    let modalActions = <button>Close</button>;
+    let modalActions = <CloseModalButton>Close</CloseModalButton>;
 
     if (cartMealsQuantity > 0) {
         modalActions = (
-        <>
-        <button>Close</button>
-        <button>Go to Checkout</button>
-        </>
+        <ModalActions>
+            <CloseModalButton>Close</CloseModalButton>
+            <CheckoutButton>Go to Checkout</CheckoutButton>
+        </ModalActions>
         )
     };
 

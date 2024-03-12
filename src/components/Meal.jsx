@@ -42,26 +42,26 @@ export const MealButton = styled.button`
 `
 
 function Meal({meals}) {
-    // Consuming useContext inside this component
-    const { addItemToCart } = useContext(CartContext);
+  // Consuming useContext inside this component
+  const { addItemToCart } = useContext(CartContext);
 
     return (
-        <>
+      <>
         {meals.map(meal => (
         <MealCard key={meal.id}>
-            <MealImg src={`/backend/public/${meal.image}`}></MealImg>
-            <MealData>
-            <p><b>{meal.name}</b></p>
-            <div>
-                <p>$ {meal.price}</p>
-            </div>
-            <p style={{minHeight: '3rem'}}>{meal.description}</p>
-            <MealButton onClick={() => addItemToCart(meal)}>Add to cart</MealButton>
-            </MealData>
+          <MealImg src={`/backend/public/${meal.image}`}></MealImg>
+          <MealData>
+          <p><b>{meal.name}</b></p>
+          <div>
+              <p>$ {meal.price}</p>
+          </div>
+          <p style={{minHeight: '3rem'}}>{meal.description}</p>
+          <MealButton onClick={() => addItemToCart(meal)}>Add to cart</MealButton>
+          </MealData>
         </MealCard>
         ))
         } 
-        </>
+      </>
     )
 }
 

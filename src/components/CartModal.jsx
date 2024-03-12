@@ -17,8 +17,8 @@ const CartModal = forwardRef(function Modal({ title, actions}, ref) {
 
   // Restituiamo il componente utilizzando createPortal per montarlo in un nodo separato del DOM
   return createPortal(
-    <dialog id="modal" ref={dialog}>
-      <h2>{title}</h2>
+    <dialog id="modal" ref={dialog} className="modal">
+      <h2 style={{marginLeft: "0.5rem"}}>{title}</h2>
       <form method="dialog">
         <Cart/>
         {actions}

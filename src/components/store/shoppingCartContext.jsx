@@ -12,7 +12,7 @@ export const CartContext = createContext(
     }
 );
 
-/* Nota: Aver impostato meal, addItemToCart, updateItemQuantity e removeItemFromCart serve per l'autocomplete con dot notation 
+/* Nota: Aver impostato addItemToCart, updateItemQuantity e removeItemFromCart serve per l'autocomplete con dot notation 
 quando puntiamo poi ctxValue nei componenti figli. 
 Se non li mettiamo l'applicazione funziona lo stesso ma diventa più difficile */
 
@@ -22,28 +22,29 @@ function shoppingCartReducer(state, action) {
 
     if (action.type === 'ADD_MEAL') {
     
+        // Importa e assegna il meal selezionato (viene passato da addItemToCart che prende come argomento il meal al click del button)
         const selectedMeal = action.payload;
-
-        console.log(selectedMeal);
         
+        // Trasforma il meal selezionato in un "meal del carrello"
         const existingMeal = state.meals.find(meal => meal.id === selectedMeal.id);
 
-        console.log(existingMeal);
-
+    
         if (existingMeal) {
         
-            // Se il pasto esiste già nel carrello, aumenta solo la quantità
-            const updatedMeals = state.meals.map(meal =>
-            meal.id === selectedMeal.id ? { ...meal, quantity: meal.quantity + 1 } : meal
+            // Se il pasto esiste già nel carrello, aumenta solo la quantità di quello (creando un array nuovo con map, quindi no bisogno di prev)
+            const updatedMeals = state.meals.map(meal => meal.id === selectedMeal.id ? { ...meal, quantity: meal.quantity + 1 } : meal
         );
-
+            
+        
+        // Tieni aggiornato lo stato
         return {
             ...state,
             meals: updatedMeals
         };
 
         } else {
-            // Se il pasto non esiste nel carrello, aggiungilo con la quantità 1
+        
+            // Se il pasto non esiste nel carrello, aggiungilo con la quantità 1 e aggiorna lo stato
             return {
                 ...state,
                 meals: [...state.meals, { ...selectedMeal, quantity: 1 }]
@@ -66,11 +67,13 @@ function shoppingCartReducer(state, action) {
         };
 
     } 
-
 }
 
+
+
 // 3. Leghiamo la funzione Reducer al Context tramite CartContextProvider
-export default function CartContextProvider({meals, children}) {
+export default function CartContextProvider({children}) {
+
 
     /* 3.1. 
     a) ShoppingCartState = i dati che vanno manipolati 
@@ -83,7 +86,7 @@ export default function CartContextProvider({meals, children}) {
     const [shoppingCartState, shoppingCartDispatch] = useReducer(shoppingCartReducer, {meals: []});
 
 
-    function handleAddItemToCart(selectedMeal) {
+    function handleAddMealToCart(selectedMeal) {
 
         shoppingCartDispatch({
         type: 'ADD_MEAL',
@@ -92,7 +95,7 @@ export default function CartContextProvider({meals, children}) {
 
     }
 
-    function handleUpdateCartItemQuantity(productId, amount) {
+    function handleUpdateMealQuantity(productId, amount) {
 
         shoppingCartDispatch({
         type: 'UPDATE_MEAL',
@@ -106,8 +109,8 @@ export default function CartContextProvider({meals, children}) {
     // 3.2 Creiamo un oggetto di raccolta dei dati e delle funzioni che saranno accessibili da tutti i componenti figli
     const ctxValue = {
         meals: shoppingCartState.meals,
-        addItemToCart: handleAddItemToCart,
-        updateMealQuantity: handleUpdateCartItemQuantity,
+        addItemToCart: handleAddMealToCart,
+        updateMealQuantity: handleUpdateMealQuantity,
     }
 
     return (

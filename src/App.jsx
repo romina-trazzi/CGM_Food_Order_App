@@ -51,15 +51,13 @@ function App() {
 
   return (
     <CartContextProvider meals={meals}>
-
-      <Header/>
+      <Header/> 
       <Main>
         <MealContainer>
-         <Meal meals={meals}/>
+          <Meal meals={meals}/>
         </MealContainer>
       </Main>
       <Footer>Final Project CGM React Course. Made by ~ Romina Trazzi - 2024 ~</Footer>
-
     </CartContextProvider>
     
   );
