@@ -43,8 +43,12 @@ export const MealCartTotal = styled.p`
   font-weight: bold;
   color: #46443c;
 `;
+export const Title = styled.h2`
+  font-weight: bold;
+  font-size: 1.5rem;
+`
 
-function Cart() {
+function Cart({title}) {
   const { meals, updateMealQuantity } = useContext(CartContext);
 
   const totalPrice = meals.reduce(
@@ -65,6 +69,7 @@ function Cart() {
   
   return (
     <div>
+      <Title style={{marginLeft: "0.5rem"}}>{title}</Title>
       {meals.length === 0 && <p>No items in cart!</p>}
       {meals.length > 0 && (
         <MealList>

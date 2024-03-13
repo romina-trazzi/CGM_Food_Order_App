@@ -20,12 +20,6 @@ export const Logo = styled.img `
     border-radius: 50%;
     border: 3px solid gold;
 `
-export const Title = styled.span`
-    padding-left: 1rem;
-    font-weight: bold;
-    font-size: 1.5rem;
-
-`
 export const ModalActions = styled.div`
     display: flex;
     justify-content: flex-end;
@@ -82,12 +76,33 @@ export const SubmitOrderButton = styled.button`
         color: #1f1a09;
     }
 `
+export const OkayButton = styled.button`
+   font: inherit;
+    cursor: pointer;
+    background-color: #ffc404;
+    border: 1px solid #ffc404;
+    color: #1f1a09;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+
+    &:hover, &:active {
+        background-color: #ffab04;
+        border-color: #ffab04;
+        color: #1f1a09;
+    }
+`
+export const Title = styled.h2`
+  padding-left: 1rem;
+  font-weight: bold;
+  font-size: 1.5rem;
+`
+
 
 function Header() {
     const { meals } = useContext(CartContext);
     const cartMealsQuantity = meals.length;
-    const [buyStep, setBuyStep] = useState("openCart"); 
     const modal = useRef();
+    const [buyStep, setBuyStep] = useState("openCart"); 
 
     // Opening modal and handling his interface
     function handleModalAction(buyStepAction, event) {
@@ -96,13 +111,10 @@ function Header() {
         setBuyStep(buyStepAction);
     }
 
-
-
-
     // Setting modal action buttons
     let modalActions = <CloseModalButton>Close</CloseModalButton>;
 
-    if (cartMealsQuantity > 0) {
+    if (buyStep === "openCart" && cartMealsQuantity > 0) {
         modalActions = (
         <ModalActions>
             <CloseModalButton>Close</CloseModalButton>
@@ -120,15 +132,23 @@ function Header() {
         )
     }
 
+    if (buyStep === "submitOrder") {
+        modalActions = (
+        <ModalActions>
+            <OkayButton>Okay</OkayButton>
+        </ModalActions>
+        )
+    }
+
     return (
         <>
-            <Modal ref={modal} title={buyStep === "openCart" ? "Your Cart" : "Checkout"} actions={modalActions} buyStep={buyStep}/>
+            <Modal ref={modal} actions={modalActions} buyStep={buyStep}/>
             <HeaderStyle>
             <div style={{display: "flex", alignItems: "center"}}>
                 <Logo src="logo.jpg" alt="Logo"/>
                 <Title>REACTFOOD</Title>
             </div>
-            <ShoppingCartButton onClick={(e) => handleModalAction('openCart', e)}> Cart ({cartMealsQuantity}) </ShoppingCartButton>
+            <ShoppingCartButton onClick={(event) => handleModalAction('openCart', event)}> Cart ({cartMealsQuantity}) </ShoppingCartButton>
             </HeaderStyle>
         </>
     
