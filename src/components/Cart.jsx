@@ -73,14 +73,15 @@ function Cart({title}) {
       const updatedMeals = meals.filter(meal => meal.id !== mealId);
 
       // Aggiorna lo stato dei pasti 
-      updateMealQuantity(updatedMeals); 
-    } else {
+      return updateMealQuantity(updatedMeals); 
 
+    } else {
+      
       // Altrimenti decrementa la quantità
-      updateMealQuantity(mealId, -1);
+      return updateMealQuantity(mealId, -1);
+      
     }
-};
-  
+  };
   
   return (
     <div>

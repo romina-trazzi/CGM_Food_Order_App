@@ -60,9 +60,11 @@ function shoppingCartReducer(state, action) {
         meal.id === productId ? { ...meal, quantity: meal.quantity + amount } : meal
         );
 
+        const filteredMeals = updatedMeals.filter(meal => meal.quantity > 0);
+
         return {
         ...state,
-        meals: updatedMeals
+        meals: filteredMeals
         };
     }
 
