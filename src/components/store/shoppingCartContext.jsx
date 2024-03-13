@@ -31,10 +31,12 @@ function shoppingCartReducer(state, action) {
 
         // Se il pasto esiste già nel carrello, aumenta solo la quantità di quello (creando un array nuovo con map, quindi no bisogno di prev)
         if (existingMealIndex !== -1) {
+
+            // Vecchi meal salvati nella costante e poi aggiornati con il piatto selezionato e la sua nuova quantità
             const updatedMeals = [...state.meals];
             updatedMeals[existingMealIndex].quantity += 1;
             
-            // Tieni aggiornato lo stato
+            // Tieni aggiornato lo stato dei meal
             return {
             ...state,
             meals: updatedMeals
@@ -45,7 +47,7 @@ function shoppingCartReducer(state, action) {
             // Se il pasto non esiste nel carrello, aggiungilo con la quantità 1 e aggiorna lo stato
             return {
                 ...state,
-                meals: [...state.meals, { ...selectedMeal, quantity: 1 }]
+                meals: [...state.meals, {...selectedMeal, quantity: 1 }]
             };
         }
     }

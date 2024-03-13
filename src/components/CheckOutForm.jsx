@@ -22,6 +22,7 @@ export const Input = styled.input`
   width: 100%;
   font: inherit;
   padding: 0.5rem;
+  margin-left: 0.5rem;
   border-radius: 4px;
   border: 1px solid #ccc;
 `

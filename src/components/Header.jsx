@@ -104,7 +104,7 @@ function Header() {
     const modal = useRef();
     const [buyStep, setBuyStep] = useState("openCart"); 
 
-    // Opening modal and handling his interface
+    // Opening modal and handling its interface
     function handleModalAction(buyStepAction, event) {
         event.preventDefault();
         modal.current.open();
@@ -131,7 +131,7 @@ function Header() {
         modalActions = (
         <ModalActions>
             <CloseModalButton>Close</CloseModalButton>
-            <SubmitOrderButton onClick={(e) => handleModalAction('submitOrder', e)}>SubmitOrder</SubmitOrderButton>
+            <SubmitOrderButton onClick={(e) => handleModalAction('submitOrder', e)}>Submit Order</SubmitOrderButton>
         </ModalActions>
         )
     }
