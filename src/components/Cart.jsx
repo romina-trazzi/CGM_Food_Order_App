@@ -70,7 +70,7 @@ function Cart({title}) {
   return (
     <div>
       <Title style={{marginLeft: "0.5rem"}}>{title}</Title>
-      {meals.length === 0 && <p>No items in cart!</p>}
+      {meals.length === 0 && <p style={{marginLeft: "0.5rem"}}>No items in cart!</p>}
       {meals.length > 0 && (
         <MealList>
           {meals.map((meal) => (

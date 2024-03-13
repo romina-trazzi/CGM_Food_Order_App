@@ -112,7 +112,11 @@ function Header() {
     }
 
     // Setting modal action buttons
-    let modalActions = <CloseModalButton>Close</CloseModalButton>;
+    let modalActions = (
+        <ModalActions>
+            <CloseModalButton>Close</CloseModalButton>
+        </ModalActions>
+    )
 
     if (buyStep === "openCart" && cartMealsQuantity > 0) {
         modalActions = (
