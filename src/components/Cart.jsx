@@ -67,6 +67,7 @@ function Cart({title}) {
     updateMealQuantity(mealId, -1);
   };
   
+  
   return (
     <div>
       <Title style={{marginLeft: "0.5rem"}}>{title}</Title>
