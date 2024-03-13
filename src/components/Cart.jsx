@@ -55,13 +55,11 @@ function Cart() {
 
   const handleIncrementQuantity = (event, mealId) => {
     event.preventDefault();
-    console.log("Hello +")
     updateMealQuantity(mealId, 1);
   };
 
   const handleDecrementQuantity = (event, mealId) => {
     event.preventDefault();
-    console.log("Hello -");
     updateMealQuantity(mealId, -1);
   };
   

@@ -53,7 +53,7 @@ function Meal({meals}) {
           <MealData>
           <p><b>{meal.name}</b></p>
           <div>
-              <p>$ {meal.price}</p>
+            <p>$ {meal.price}</p>
           </div>
           <p style={{minHeight: '3rem'}}>{meal.description}</p>
           <MealButton onClick={() => addItemToCart(meal)}>Add to cart</MealButton>

@@ -27,24 +27,27 @@ export const Footer = styled.footer `
 
 `
 
+
+
 function App() {
 
   // Getting initial meals data
   useEffect(() => {
     const fetchData = async () => {
-        try {
+      try {
         const mealsData = await fetchMeals();
         setMeals(prev => {
             // Adding a quantity property settled to 0
             const updatedMeals = mealsData.map(meal => ({...meal, quantity: 0}));
             return updatedMeals;  
-        });
-        } catch (error) {
+          }
+        );
+      } catch (error) {
         console.error('Error fetching meals:', error);
-        }
+      }
     };
 
-    fetchData();
+  fetchData();
   }, []);
 
   const [meals, setMeals] = useState([]);

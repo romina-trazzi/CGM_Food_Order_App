@@ -1,8 +1,10 @@
 import { forwardRef, useImperativeHandle, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import Cart from './Cart';
+import CheckOutForm from './CheckOutForm'
+import Success from './Success'
 
-const CartModal = forwardRef(function Modal({ title, actions}, ref) {
+const Modal = forwardRef(function Modal({ title, actions, buyStep}, ref) {
   const dialog = useRef();
 
   // Utilizziamo useImperativeHandle per esporre una funzione personalizzata attraverso il riferimento
@@ -20,14 +22,15 @@ const CartModal = forwardRef(function Modal({ title, actions}, ref) {
     <dialog id="modal" ref={dialog} className="modal">
       <h2 style={{marginLeft: "0.5rem"}}>{title}</h2>
       <form method="dialog">
-        <Cart/>
+        {buyStep === "openCart" && <Cart /> }
+        {buyStep === "goToCheckout" && <CheckOutForm />} 
+        {buyStep === "submitOrder" && <Success />}
         {actions}
       </form>
     </dialog>,
     // Montiamo il dialog nel nodo del DOM con ID 'modal'
     document.getElementById('modal')
-
   );
 });
 
-export default CartModal;
+export default Modal;

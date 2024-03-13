@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import { useRef, useContext } from 'react'
-import ShoppingCartBtn from './ShoppingCartBtn.jsx'
-import CartModal from './CartModal.jsx';
+import { useRef, useContext, useState } from 'react'
+import Modal from './Modal.jsx';
 import { CartContext } from './store/shoppingCartContext.jsx';
 
 
@@ -59,19 +58,46 @@ export const CloseModalButton = styled.button`
     }
 
 `
+export const ShoppingCartButton = styled.button`
+  padding: 1rem;
+  background-color: transparent;
+  border: 0px;
+  font-size: 1.2rem;
+  font-weight: bolder;
+  color: gold;
+  cursor: pointer;
+`
+export const SubmitOrderButton = styled.button`
+    font: inherit;
+    cursor: pointer;
+    background-color: #ffc404;
+    border: 1px solid #ffc404;
+    color: #1f1a09;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+
+    &:hover, &:active {
+        background-color: #ffab04;
+        border-color: #ffab04;
+        color: #1f1a09;
+    }
+`
 
 function Header() {
-
     const { meals } = useContext(CartContext);
     const cartMealsQuantity = meals.length;
-    
+    const [buyStep, setBuyStep] = useState("openCart"); 
     const modal = useRef();
 
-    // Opening the shopping cart modal
-    function handleOpenCart() {
-        // Richiamiamo la funzione open() del componente CartModal tramite il riferimento
+    // Opening modal and handling his interface
+    function handleModalAction(buyStepAction, event) {
+        event.preventDefault();
         modal.current.open();
+        setBuyStep(buyStepAction);
     }
+
+
+
 
     // Setting modal action buttons
     let modalActions = <CloseModalButton>Close</CloseModalButton>;
@@ -80,24 +106,33 @@ function Header() {
         modalActions = (
         <ModalActions>
             <CloseModalButton>Close</CloseModalButton>
-            <CheckoutButton>Go to Checkout</CheckoutButton>
+            <CheckoutButton onClick={(e) => handleModalAction('goToCheckout', e)}>Go to Checkout</CheckoutButton>
         </ModalActions>
         )
     };
 
-  return (
-    <>
-        <CartModal ref={modal} title="Your Cart" actions={modalActions}/>
-        <HeaderStyle>
-        <div style={{display: "flex", alignItems: "center"}}>
-            <Logo src="logo.jpg" alt="Logo"/>
-            <Title>REACTFOOD</Title>
-        </div>
-        <ShoppingCartBtn onOpenCart={handleOpenCart}> Cart ({cartMealsQuantity}) </ShoppingCartBtn>
-        </HeaderStyle>
-    </>
+    if (buyStep === "goToCheckout") {
+        modalActions = (
+        <ModalActions>
+            <CloseModalButton>Close</CloseModalButton>
+            <SubmitOrderButton onClick={(e) => handleModalAction('submitOrder', e)}>SubmitOrder</SubmitOrderButton>
+        </ModalActions>
+        )
+    }
+
+    return (
+        <>
+            <Modal ref={modal} title={buyStep === "openCart" ? "Your Cart" : "Checkout"} actions={modalActions} buyStep={buyStep}/>
+            <HeaderStyle>
+            <div style={{display: "flex", alignItems: "center"}}>
+                <Logo src="logo.jpg" alt="Logo"/>
+                <Title>REACTFOOD</Title>
+            </div>
+            <ShoppingCartButton onClick={(e) => handleModalAction('openCart', e)}> Cart ({cartMealsQuantity}) </ShoppingCartButton>
+            </HeaderStyle>
+        </>
     
-  )
+    )
 }
 
 export default Header
