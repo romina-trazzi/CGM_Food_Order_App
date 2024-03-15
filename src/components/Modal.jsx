@@ -10,17 +10,26 @@ const Modal = forwardRef(function Modal({actions, buyStep}, ref) {
   // Utilizziamo useImperativeHandle per esporre una funzione personalizzata attraverso il riferimento
   useImperativeHandle(ref, () => {
     return {
-      // La funzione open legata a Header (handleModalAction) apre il dialogo mostrando il modal
+      // La funzione open\close legata a Header (handleModalAction) apre\chiude il dialogo mostrando il modal
       open: () => {
         dialog.current.showModal();
+      },
+
+      close: () => {
+        dialog.current.close();
       },
     };
   });
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    dialog.current.close();
+  };
+
   // Restituiamo il componente utilizzando createPortal per montarlo in un nodo separato del DOM
   return createPortal(
     <dialog id="modal" ref={dialog} className="modal">
-      <form method="dialog">
+      <form method="dialog" className="modal-form" onSubmit={handleSubmit}>
         {buyStep === "openCart" && <Cart title = "Your Cart"/> }
         {buyStep === "goToCheckout" && <CheckOutForm title = "Checkout"/>} 
         {buyStep === "submitOrder" && <Success title = "Success"/>}

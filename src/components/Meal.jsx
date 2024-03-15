@@ -51,18 +51,18 @@ function Meal({meals}) {
         <MealCard key={meal.id}>
           <MealImg src={`/backend/public/${meal.image}`}></MealImg>
           <MealData>
-          <p><b>{meal.name}</b></p>
-          <div>
-            <p>$ {meal.price}</p>
-          </div>
-          <p style={{minHeight: '3rem'}}>{meal.description}</p>
-          <MealButton onClick={() => addItemToCart(meal)}>Add to cart</MealButton>
+            <p><b>{meal.name}</b></p>
+            <div>
+              <p>$ {meal.price}</p>
+            </div>
+            <p style={{minHeight: '3rem'}}>{meal.description}</p>
+            <MealButton onClick={() => addItemToCart(meal)}>Add to cart</MealButton>
           </MealData>
         </MealCard>
         ))
-        } 
-      </>
-    )
+      } 
+    </>
+  )
 }
 
 export default Meal

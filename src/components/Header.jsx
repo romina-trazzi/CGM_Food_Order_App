@@ -109,20 +109,24 @@ function Header() {
         event.preventDefault();
         modal.current.open();
         setBuyStep(buyStepAction);
+        
+        if (buyStepAction === "close") {
+            modal.current.close()
+        }
     }
 
     // Setting modal action buttons
     let modalActions = (
         <ModalActions>
-            <CloseModalButton>Close</CloseModalButton>
+            <CloseModalButton onClick={(event) => handleModalAction('close', event)}>Close</CloseModalButton>
         </ModalActions>
     )
 
     if (buyStep === "openCart" && cartMealsQuantity > 0) {
         modalActions = (
         <ModalActions>
-            <CloseModalButton>Close</CloseModalButton>
-            <CheckoutButton onClick={(e) => handleModalAction('goToCheckout', e)}>Go to Checkout</CheckoutButton>
+            <CloseModalButton type="button" onClick={(event) => handleModalAction('close', event)}>Close</CloseModalButton>
+            <CheckoutButton onClick={(event) => handleModalAction('goToCheckout', event)} type="button">Go to Checkout</CheckoutButton>
         </ModalActions>
         )
     };
@@ -130,8 +134,8 @@ function Header() {
     if (buyStep === "goToCheckout") {
         modalActions = (
         <ModalActions>
-            <CloseModalButton>Close</CloseModalButton>
-            <SubmitOrderButton onClick={(e) => handleModalAction('submitOrder', e)}>Submit Order</SubmitOrderButton>
+            <CloseModalButton type="button" onClick={(event) => handleModalAction('close', event)}>Close</CloseModalButton>
+            <SubmitOrderButton onClick={(event) => handleModalAction('submitOrder', event)} type="submit">Submit Order</SubmitOrderButton>
         </ModalActions>
         )
     }
@@ -139,7 +143,7 @@ function Header() {
     if (buyStep === "submitOrder") {
         modalActions = (
         <ModalActions>
-            <OkayButton>Okay</OkayButton>
+            <OkayButton type="button">Okay</OkayButton>
         </ModalActions>
         )
     }

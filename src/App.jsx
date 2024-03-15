@@ -28,7 +28,6 @@ export const Footer = styled.footer `
 `
 
 
-
 function App() {
 
   // Getting initial meals data

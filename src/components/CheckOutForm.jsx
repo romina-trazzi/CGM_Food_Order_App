@@ -36,24 +36,26 @@ export const Row = styled.div`
 
 function CheckOutForm({title}) {
 
+  const inputValueRef = useRef();
+
   return (
     <FormContainer>
       <Title>{title}</Title>
       <span style={{marginLeft: "0.5rem", marginBottom: "1rem"}}>Total amount:</span>
       <Label>Full Name</Label>
-      <Input required/>
+      <Input type="text" required name="fullName" ref={inputValueRef}/>
       <Label>E-Mail Address</Label>
-      <Input required/>
+      <Input type="email"required name="email" ref={inputValueRef}/>
       <Label>Street</Label>
-      <Input required/>
+      <Input type="text" required name='street' ref={inputValueRef}/>
       <Row>
         <div>
-          <Label>Postal Code</Label>
-          <Input required style={{marginTop:"0.5rem"}}/>
+          <Label type="number">Postal Code</Label>
+          <Input required style={{marginTop:"0.5rem"}} name="postalCode" ref={inputValueRef}/>
         </div>
         <div>
           <Label>City</Label>
-          <Input required style={{marginTop:"0.5rem"}}/>
+          <Input required type="text" style={{marginTop:"0.5rem"}} name="city" ref={inputValueRef}/>
         </div>
       </Row>
     </FormContainer>
