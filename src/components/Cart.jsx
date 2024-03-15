@@ -48,18 +48,23 @@ export const Title = styled.h2`
   font-size: 1.5rem;
 `
 
-function Cart({title}) {
+function Cart({title, onSetTotalCartPrice}) {
   const { meals, updateMealQuantity } = useContext(CartContext);
 
-  const totalPrice = meals.reduce(
-    (acc, meal) => acc + meal.price * meal.quantity, 0
-  );
+  const calculateTotalPrice = () => {
+    return meals.reduce((acc, meal) => acc + meal.price * meal.quantity, 0).toFixed(2);
+  };
 
-  const formattedTotalPrice = `$${totalPrice.toFixed(2)}`;
+
+
+  // const totalPrice = meals.reduce((acc, meal) => acc + meal.price * meal.quantity, 0);
+  // const formattedTotalPrice = `$${totalPrice.toFixed(2)}`;
 
   const handleIncrementQuantity = (event, mealId) => {
     event.preventDefault();
     updateMealQuantity(mealId, 1);
+    const totalPrice = calculateTotalPrice();
+    return onSetTotalCartPrice(totalPrice);
   };
 
   const handleDecrementQuantity = (event, mealId) => {
@@ -71,16 +76,19 @@ function Cart({title}) {
     // Se il pasto esiste e la sua quantità è pari a zero rimuovilo dal carrello filtrando l'array meals
     if (mealToUpdate && mealToUpdate.quantity === 0) {
       const updatedMeals = meals.filter(meal => meal.id !== mealId);
-
-      // Aggiorna lo stato dei pasti 
-      return updateMealQuantity(updatedMeals); 
-
+      updateMealQuantity(updatedMeals)
+     
     } else {
       
-      // Altrimenti decrementa la quantità
-      return updateMealQuantity(mealId, -1);
-      
+      // Altrimenti decrementa la quantità e aggiorna lo stato del prezzo totale formattato nel componente parent Modal
+      updateMealQuantity(mealId, -1);
     }
+
+    // In ogni caso aggiorna il prezzo totale e manda la info al componente genitore Modal
+    const totalPrice = calculateTotalPrice();
+    return onSetTotalCartPrice(totalPrice);
+    
+    
   };
   
   return (
@@ -94,16 +102,16 @@ function Cart({title}) {
               <MealData>
                 <div>{meal.name} - ({meal.quantity} x {meal.price})</div>
                 <div style={{display: "flex", justifyContent: "end"}}>
-                  <MealUpdateButton onClick={(e) => handleIncrementQuantity(e, meal.id)}> + </MealUpdateButton>
+                  <MealUpdateButton onClick={(event) => handleIncrementQuantity(event, meal.id)}> + </MealUpdateButton>
                   <span style={{paddingLeft: "1rem", paddingRight: "1rem"}}>{meal.quantity}</span>
-                  <MealUpdateButton onClick={(e) => handleDecrementQuantity(e, meal.id)}> - </MealUpdateButton>
+                  <MealUpdateButton onClick={(event) => handleDecrementQuantity(event, meal.id)}> - </MealUpdateButton>
                 </div>
               </MealData>
             </MealRow>
           ))}
         </MealList>
       )}
-      <MealCartTotal><strong>{formattedTotalPrice}</strong></MealCartTotal>
+      <MealCartTotal><strong>${calculateTotalPrice()}</strong></MealCartTotal>
     </div>
   );
 }

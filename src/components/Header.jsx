@@ -118,7 +118,7 @@ function Header() {
     // Setting modal action buttons
     let modalActions = (
         <ModalActions>
-            <CloseModalButton onClick={(event) => handleModalAction('close', event)}>Close</CloseModalButton>
+            <CloseModalButton type="button" onClick={(event) => handleModalAction('close', event)}>Close</CloseModalButton>
         </ModalActions>
     )
 
@@ -143,7 +143,7 @@ function Header() {
     if (buyStep === "submitOrder") {
         modalActions = (
         <ModalActions>
-            <OkayButton type="button">Okay</OkayButton>
+            <OkayButton type="submit">Okay</OkayButton>
         </ModalActions>
         )
     }

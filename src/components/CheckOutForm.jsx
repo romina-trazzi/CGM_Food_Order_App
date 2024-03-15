@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import {useRef} from 'react'
 
+
 export const Title = styled.h2`
   font-weight: bold;
   font-size: 1.5rem;
@@ -34,14 +35,14 @@ export const Row = styled.div`
   gap: 1rem;
 `
 
-function CheckOutForm({title}) {
+function CheckOutForm({title, totalCartPrice}) {
 
   const inputValueRef = useRef();
 
   return (
     <FormContainer>
       <Title>{title}</Title>
-      <span style={{marginLeft: "0.5rem", marginBottom: "1rem"}}>Total amount:</span>
+      <span style={{marginLeft: "0.5rem", marginBottom: "1rem"}}>Total amount: {totalCartPrice}</span>
       <Label>Full Name</Label>
       <Input type="text" required name="fullName" ref={inputValueRef}/>
       <Label>E-Mail Address</Label>

@@ -12,7 +12,7 @@ export const CartContext = createContext(
     }
 );
 
-/* Nota: Aver impostato addItemToCart, updateItemQuantity e removeItemFromCart serve per l'autocomplete con dot notation 
+/* Nota: Aver impostato meals, addItemToCart, updateItemQuantity serve per l'autocomplete con dot notation 
 quando puntiamo poi ctxValue nei componenti figli. 
 Se non li mettiamo l'applicazione funziona lo stesso ma diventa più difficile */
 
@@ -54,12 +54,14 @@ function shoppingCartReducer(state, action) {
     
     if (action.type === 'UPDATE_MEAL') {
         
+        // Destruttura l'oggetto payload
         const { productId, amount } = action.payload;
 
         const updatedMeals = state.meals.map(meal =>
         meal.id === productId ? { ...meal, quantity: meal.quantity + amount } : meal
         );
-
+        
+        // Mostra solo i meal la cui quantità è maggiore di 0
         const filteredMeals = updatedMeals.filter(meal => meal.quantity > 0);
 
         return {
