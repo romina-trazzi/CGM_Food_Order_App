@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useRef, useContext, useState } from 'react'
+import { useRef, useContext } from 'react'
 import Modal from './Modal.jsx';
 import { CartContext } from './store/shoppingCartContext.jsx';
 
@@ -12,7 +12,6 @@ export const HeaderStyle = styled.header `
     align-items: center;
     padding: 1rem 10%;
     margin-bottom: 5rem;
-   
     color: gold;
 `
 export const Logo = styled.img `
@@ -20,37 +19,10 @@ export const Logo = styled.img `
     border-radius: 50%;
     border: 3px solid gold;
 `
-export const ModalActions = styled.div`
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-`
-export const CheckoutButton = styled.button`
-    font: inherit;
-    cursor: pointer;
-    background-color: #ffc404;
-    border: 1px solid #ffc404;
-    color: #1f1a09;
-    padding: 0.5rem 1.5rem;
-    border-radius: 4px;
-
-    &:hover, &:active {
-        background-color: #ffab04;
-        border-color: #ffab04;
-        color: #1f1a09;
-    }
-`
-export const CloseModalButton = styled.button`
-    font: inherit;
-    cursor: pointer;
-    background-color: transparent;
-    border: none;
-    color: #1d1a16;
-
-    &:hover, &:active {
-        color: #312c1d;
-    }
-
+export const Title = styled.h2`
+  padding-left: 1rem;
+  font-weight: bold;
+  font-size: 1.5rem;
 `
 export const ShoppingCartButton = styled.button`
   padding: 1rem;
@@ -61,102 +33,27 @@ export const ShoppingCartButton = styled.button`
   color: gold;
   cursor: pointer;
 `
-export const SubmitOrderButton = styled.button`
-    font: inherit;
-    cursor: pointer;
-    background-color: #ffc404;
-    border: 1px solid #ffc404;
-    color: #1f1a09;
-    padding: 0.5rem 1.5rem;
-    border-radius: 4px;
-
-    &:hover, &:active {
-        background-color: #ffab04;
-        border-color: #ffab04;
-        color: #1f1a09;
-    }
-`
-export const OkayButton = styled.button`
-   font: inherit;
-    cursor: pointer;
-    background-color: #ffc404;
-    border: 1px solid #ffc404;
-    color: #1f1a09;
-    padding: 0.5rem 1.5rem;
-    border-radius: 4px;
-
-    &:hover, &:active {
-        background-color: #ffab04;
-        border-color: #ffab04;
-        color: #1f1a09;
-    }
-`
-export const Title = styled.h2`
-  padding-left: 1rem;
-  font-weight: bold;
-  font-size: 1.5rem;
-`
-
 
 function Header() {
     const { meals } = useContext(CartContext);
     const cartMealsQuantity = meals.length;
-    const modal = useRef();
-    const [buyStep, setBuyStep] = useState("openCart"); 
+    const modalRef = useRef();
 
-    // Opening modal and handling its interface
-    function handleModalAction(buyStepAction, event) {
-        event.preventDefault();
-        modal.current.open();
-        setBuyStep(buyStepAction);
-        
-        if (buyStepAction === "close") {
-            modal.current.close()
-        }
-    }
-
-    // Setting modal action buttons
-    let modalActions = (
-        <ModalActions>
-            <CloseModalButton type="button" onClick={(event) => handleModalAction('close', event)}>Close</CloseModalButton>
-        </ModalActions>
-    )
-
-    if (buyStep === "openCart" && cartMealsQuantity > 0) {
-        modalActions = (
-        <ModalActions>
-            <CloseModalButton type="button" onClick={(event) => handleModalAction('close', event)}>Close</CloseModalButton>
-            <CheckoutButton onClick={(event) => handleModalAction('goToCheckout', event)} type="button">Go to Checkout</CheckoutButton>
-        </ModalActions>
-        )
+    const openModal = (buyStepAction) => {
+        modalRef.current.open();
+        modalRef.current.setBuyStep(buyStepAction);
     };
-
-    if (buyStep === "goToCheckout") {
-        modalActions = (
-        <ModalActions>
-            <CloseModalButton type="button" onClick={(event) => handleModalAction('close', event)}>Close</CloseModalButton>
-            <SubmitOrderButton onClick={(event) => handleModalAction('submitOrder', event)} type="submit">Submit Order</SubmitOrderButton>
-        </ModalActions>
-        )
-    }
-
-    if (buyStep === "submitOrder") {
-        modalActions = (
-        <ModalActions>
-            <OkayButton type="submit">Okay</OkayButton>
-        </ModalActions>
-        )
-    }
+     
 
     return (
         <>
-            <Modal ref={modal} actions={modalActions} buyStep={buyStep}/>
+            <Modal ref={modalRef}/>
             <HeaderStyle>
             <div style={{display: "flex", alignItems: "center"}}>
                 <Logo src="logo.jpg" alt="Logo"/>
                 <Title>REACTFOOD</Title>
             </div>
-            <ShoppingCartButton onClick={(event) => handleModalAction('openCart', event)}> Cart ({cartMealsQuantity}) </ShoppingCartButton>
+            <ShoppingCartButton onClick={() => openModal("openCart")}> Cart ({cartMealsQuantity}) </ShoppingCartButton>
             </HeaderStyle>
         </>
     

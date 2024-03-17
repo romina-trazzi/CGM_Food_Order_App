@@ -91,8 +91,8 @@ export default function CartContextProvider({children}) {
     function handleAddMealToCart(selectedMeal) {
 
         shoppingCartDispatch({
-        type: 'ADD_MEAL',
-        payload: selectedMeal
+            type: 'ADD_MEAL',
+            payload: selectedMeal
         })
 
     }

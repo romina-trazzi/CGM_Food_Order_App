@@ -48,23 +48,15 @@ export const Title = styled.h2`
   font-size: 1.5rem;
 `
 
-function Cart({title, onSetTotalCartPrice}) {
+function Cart({title, totalCartPrice}) {
   const { meals, updateMealQuantity } = useContext(CartContext);
-
-  const calculateTotalPrice = () => {
-    return meals.reduce((acc, meal) => acc + meal.price * meal.quantity, 0).toFixed(2);
-  };
-
-
-
-  // const totalPrice = meals.reduce((acc, meal) => acc + meal.price * meal.quantity, 0);
-  // const formattedTotalPrice = `$${totalPrice.toFixed(2)}`;
 
   const handleIncrementQuantity = (event, mealId) => {
     event.preventDefault();
+    
+    // Aggiorna q.tà pasto selezionato +1
     updateMealQuantity(mealId, 1);
-    const totalPrice = calculateTotalPrice();
-    return onSetTotalCartPrice(totalPrice);
+  
   };
 
   const handleDecrementQuantity = (event, mealId) => {
@@ -75,22 +67,16 @@ function Cart({title, onSetTotalCartPrice}) {
     
     // Se il pasto esiste e la sua quantità è pari a zero rimuovilo dal carrello filtrando l'array meals
     if (mealToUpdate && mealToUpdate.quantity === 0) {
+
+      // Filtra ed elimina i pasti con q.tà 0
       const updatedMeals = meals.filter(meal => meal.id !== mealId);
-      updateMealQuantity(updatedMeals)
-     
+      updateMealQuantity(updatedMeals);
     } else {
-      
-      // Altrimenti decrementa la quantità e aggiorna lo stato del prezzo totale formattato nel componente parent Modal
+      // Altrimenti aggiorna q.tà pasto selezionato -1
       updateMealQuantity(mealId, -1);
     }
-
-    // In ogni caso aggiorna il prezzo totale e manda la info al componente genitore Modal
-    const totalPrice = calculateTotalPrice();
-    return onSetTotalCartPrice(totalPrice);
-    
-    
   };
-  
+
   return (
     <div>
       <Title style={{marginLeft: "0.5rem"}}>{title}</Title>
@@ -111,7 +97,7 @@ function Cart({title, onSetTotalCartPrice}) {
           ))}
         </MealList>
       )}
-      <MealCartTotal><strong>${calculateTotalPrice()}</strong></MealCartTotal>
+      <MealCartTotal><strong>${totalCartPrice}</strong></MealCartTotal>
     </div>
   );
 }

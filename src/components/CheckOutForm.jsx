@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import {useRef} from 'react'
 
 
 export const Title = styled.h2`
@@ -35,28 +34,32 @@ export const Row = styled.div`
   gap: 1rem;
 `
 
-function CheckOutForm({title, totalCartPrice}) {
+function handleChange (event) {
+  console.log(event.target.value);
+}
 
-  const inputValueRef = useRef();
+
+function CheckOutForm({title, totalCartPrice, userData}) {
+  
 
   return (
     <FormContainer>
       <Title>{title}</Title>
-      <span style={{marginLeft: "0.5rem", marginBottom: "1rem"}}>Total amount: {totalCartPrice}</span>
+      <span style={{marginLeft: "0.5rem", marginBottom: "1rem"}}>Total amount: ${totalCartPrice}</span>
       <Label>Full Name</Label>
-      <Input type="text" required name="fullName" ref={inputValueRef}/>
+      <Input type="text" required name="fullName" value={userData.name} onChange={handleChange}/>
       <Label>E-Mail Address</Label>
-      <Input type="email"required name="email" ref={inputValueRef}/>
+      <Input type="email"required name="email" value={userData.email} onChange={handleChange}/>
       <Label>Street</Label>
-      <Input type="text" required name='street' ref={inputValueRef}/>
+      <Input type="text" required name='street' value={userData.street} onChange={handleChange}/>
       <Row>
         <div>
           <Label type="number">Postal Code</Label>
-          <Input required style={{marginTop:"0.5rem"}} name="postalCode" ref={inputValueRef}/>
+          <Input required style={{marginTop:"0.5rem"}} name="postalCode" value={userData.postalcode} onChange={handleChange}/>
         </div>
         <div>
           <Label>City</Label>
-          <Input required type="text" style={{marginTop:"0.5rem"}} name="city" ref={inputValueRef}/>
+          <Input required type="text" style={{marginTop:"0.5rem"}} name="city" value={userData.city} onChange={handleChange}/>
         </div>
       </Row>
     </FormContainer>
