@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-
+import { useState } from 'react'
 
 export const Title = styled.h2`
   font-weight: bold;
@@ -34,20 +34,24 @@ export const Row = styled.div`
   gap: 1rem;
 `
 
-function handleChange (event) {
-  console.log(event.target.value);
-}
+function CheckOutForm({title, totalCartPrice}) {
 
+   const [userData, setUserData] = useState({fullName:"", email:"", street:"", postalCode: 0, city:""});
 
-function CheckOutForm({title, totalCartPrice, userData}) {
-  
+   function handleChange(event) {
+    const { name, value } = event.target;
+    setUserData(prevUserData => ({
+      ...prevUserData,
+      [name]: value
+    }));
+  }
 
   return (
     <FormContainer>
       <Title>{title}</Title>
       <span style={{marginLeft: "0.5rem", marginBottom: "1rem"}}>Total amount: ${totalCartPrice}</span>
       <Label>Full Name</Label>
-      <Input type="text" required name="fullName" value={userData.name} onChange={handleChange}/>
+      <Input type="text" required name="fullName" value={userData.fullName} onChange={handleChange}/>
       <Label>E-Mail Address</Label>
       <Input type="email"required name="email" value={userData.email} onChange={handleChange}/>
       <Label>Street</Label>
@@ -55,7 +59,7 @@ function CheckOutForm({title, totalCartPrice, userData}) {
       <Row>
         <div>
           <Label type="number">Postal Code</Label>
-          <Input required style={{marginTop:"0.5rem"}} name="postalCode" value={userData.postalcode} onChange={handleChange}/>
+          <Input required style={{marginTop:"0.5rem"}} name="postalCode" value={userData.postalCode} onChange={handleChange}/>
         </div>
         <div>
           <Label>City</Label>

@@ -71,17 +71,15 @@ export const OkayButton = styled.button`
 
 const Modal = forwardRef(function Modal({}, ref) {
   const dialog = useRef();
-
   const [totalCartPrice, setTotalCartPrice] = useState(0);
   const [buyStep, setBuyStep] = useState("openCart");
-  const [userData, setUserData] = useState({name: "", adress:"", street:"", postalcode:"", city:""});
   const { meals } = useContext(CartContext);
   const cartMealsQuantity = meals.length;
 
-  // Utilizziamo useImperativeHandle per passare la dichiarazione delle funzioni open\close della modale legate a Header
+  
   useImperativeHandle(ref, () => {
     return {
-      // Definiamo le funzioni che può utilizzare il componente Header tramite modalRef.current.nomeAzione
+      // Defining the functions used by Header component (with modalRef.current.actionName)
       open: () => {
         dialog.current.showModal();
       },
@@ -101,7 +99,7 @@ const Modal = forwardRef(function Modal({}, ref) {
     dialog.current.close();
   };
 
-  // Opening modal and handling modal actions 
+  // Handling modal actions 
   function handleModalAction(buyStepAction, event) {
     event.preventDefault();
     dialog.current.showModal();
@@ -111,16 +109,6 @@ const Modal = forwardRef(function Modal({}, ref) {
       dialog.current.close();
     }
   }
-
-  const calculateTotalPrice = () => {
-    return +(meals.reduce((acc, meal) => acc + meal.price * meal.quantity, 0).toFixed(2));
-  };
-
-  // Calculate total price cart
-  useEffect(() => {
-    setTotalCartPrice(calculateTotalPrice());
-  }, [meals]);
-
 
   // Setting modal action buttons
   let modalActions = (
@@ -150,10 +138,19 @@ const Modal = forwardRef(function Modal({}, ref) {
   if (buyStep === "submitOrder") {
     modalActions = (
     <ModalActions>
-      <OkayButton type="submit">Okay</OkayButton>
+      <OkayButton type="button" onClick={(event) => handleModalAction('close', event)}>Okay</OkayButton>
     </ModalActions>
     )
   }
+
+  const calculateTotalPrice = () => {
+    return +(meals.reduce((acc, meal) => acc + meal.price * meal.quantity, 0).toFixed(2));
+  };
+
+  // Calculate total price cart every time meals quantity changes
+  useEffect(() => {
+    setTotalCartPrice(calculateTotalPrice());
+  }, [meals]);
 
   
   // Restituiamo il componente utilizzando createPortal per montarlo in un nodo separato del DOM
@@ -161,7 +158,7 @@ const Modal = forwardRef(function Modal({}, ref) {
     <dialog id="modal" ref={dialog} className="modal">
       <form method="dialog" className="modal-form" onSubmit={handleSubmit}>
         {buyStep === "openCart" && <Cart title="Your Cart" totalCartPrice={totalCartPrice}/>}
-        {buyStep === "goToCheckout" && <CheckOutForm title = "Checkout" totalCartPrice={totalCartPrice} userData={userData} />} 
+        {buyStep === "goToCheckout" && <CheckOutForm title = "Checkout" totalCartPrice={totalCartPrice} />} 
         {buyStep === "submitOrder" && <Success title = "Success"/>}
         {modalActions}
       </form>
