@@ -76,7 +76,6 @@ const Modal = forwardRef(function Modal({}, ref) {
   const { meals } = useContext(CartContext);
   const cartMealsQuantity = meals.length;
 
-  
   useImperativeHandle(ref, () => {
     return {
       // Defining the functions used by Header component (with modalRef.current.actionName)
@@ -94,11 +93,7 @@ const Modal = forwardRef(function Modal({}, ref) {
     };
   });
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    dialog.current.close();
-  };
-
+  
   // Handling modal actions 
   function handleModalAction(buyStepAction, event) {
     event.preventDefault();
@@ -130,7 +125,7 @@ const Modal = forwardRef(function Modal({}, ref) {
     modalActions = (
     <ModalActions>
       <CloseModalButton type="button" onClick={(event) => handleModalAction('close', event)}>Close</CloseModalButton>
-      <SubmitOrderButton onClick={(event) => handleModalAction('submitOrder', event)} type="submit">Submit Order</SubmitOrderButton>
+      <SubmitOrderButton type="submit" onClick={(event) => handleSubmit(event)}>Submit Order</SubmitOrderButton>
     </ModalActions>
     )
   }
@@ -152,11 +147,22 @@ const Modal = forwardRef(function Modal({}, ref) {
     setTotalCartPrice(calculateTotalPrice());
   }, [meals]);
 
+  // Submit CheckOutForm
+  const handleSubmit = (formData, event) => {
+    event.preventDefault();
+    if (validateForm(formData)) {
+      console.log("Form valido, pronto alla spedizione")
+      dialog.current.close();
+
+    } else {
+      console.log("Form non valido");
+    }
+  };
   
   // Restituiamo il componente utilizzando createPortal per montarlo in un nodo separato del DOM
   return createPortal(
     <dialog id="modal" ref={dialog} className="modal">
-      <form method="dialog" className="modal-form" onSubmit={handleSubmit}>
+      <form method="dialog" className="modal-form">
         {buyStep === "openCart" && <Cart title="Your Cart" totalCartPrice={totalCartPrice}/>}
         {buyStep === "goToCheckout" && <CheckOutForm title = "Checkout" totalCartPrice={totalCartPrice} />} 
         {buyStep === "submitOrder" && <Success title = "Success"/>}
