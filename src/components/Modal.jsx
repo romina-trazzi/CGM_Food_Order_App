@@ -73,8 +73,12 @@ const Modal = forwardRef(function Modal({}, ref) {
   const dialog = useRef();
   const [totalCartPrice, setTotalCartPrice] = useState(0);
   const [buyStep, setBuyStep] = useState("openCart");
+  const [shouldValidate, setShouldValidate] = useState(false);
+  const [userData, setUserData] = useState({fullName: "", email: "", street: "", postalCode: "", city: ""});
+
   const { meals } = useContext(CartContext);
   const cartMealsQuantity = meals.length;
+
 
   useImperativeHandle(ref, () => {
     return {
@@ -92,7 +96,6 @@ const Modal = forwardRef(function Modal({}, ref) {
       }
     };
   });
-
   
   // Handling modal actions 
   function handleModalAction(buyStepAction, event) {
@@ -103,6 +106,10 @@ const Modal = forwardRef(function Modal({}, ref) {
     if (buyStepAction === "close") {
       dialog.current.close();
     }
+  }
+
+  function handleValidate(event) {
+    setShouldValidate(true)
   }
 
   // Setting modal action buttons
@@ -125,7 +132,7 @@ const Modal = forwardRef(function Modal({}, ref) {
     modalActions = (
     <ModalActions>
       <CloseModalButton type="button" onClick={(event) => handleModalAction('close', event)}>Close</CloseModalButton>
-      <SubmitOrderButton type="submit" onClick={(event) => handleSubmit(event)}>Submit Order</SubmitOrderButton>
+      <SubmitOrderButton type="submit" onClick={(event) => handleValidate(event)}>Submit Order</SubmitOrderButton>
     </ModalActions>
     )
   }
@@ -147,24 +154,76 @@ const Modal = forwardRef(function Modal({}, ref) {
     setTotalCartPrice(calculateTotalPrice());
   }, [meals]);
 
-  // Submit CheckOutForm
-  const handleSubmit = (formData, event) => {
-    event.preventDefault();
-    if (validateForm(formData)) {
-      console.log("Form valido, pronto alla spedizione")
-      dialog.current.close();
+  // Form validation
+  const validateForm = () => {
+    const newErrors = {};
 
-    } else {
-      console.log("Form non valido");
+    // Validazione Nome completo
+    const fullNamePattern = /^[A-Z][a-z]{2,} [A-Z][a-z]{2,}$/;
+    if (userData.fullName.trim() === "") {
+      newErrors.fullName = "Inserisci nome e cognome";
+      setIsValid(false);
+    } else if(!userData.fullName.includes(" ")) {
+      newErrors.fullName = "Inserisci sia il nome che il cognome";
+      setIsValid(false);
+    } else if(!fullNamePattern.test(userData.fullName)) {
+      newErrors.fullName = "Inserisci un nome e un cognome validi";
+      setIsValid(false);
     }
-  };
+    
+    // Validazione Indirizzo email
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (userData.email.trim() === "") {
+      newErrors.email = "Inserisci il tuo indirizzo email";
+      setIsValid(false);
+    } else if (!emailPattern.test(userData.email)) {
+      newErrors.email = "Inserisci un'email valida";
+      setIsValid(false);
+    }
+
+    // Validazione Indirizzo
+    const addressPattern = /^(Via|Viale|Piazza|Corso|Largo)\s[A-Za-zÀ-ÖØ-öø-ÿ]+\s\d+$/;
+    if (userData.street.trim() === "") {
+      newErrors.street = "Inserisci il tuo indirizzo";
+      setIsValid(false);
+    } else if(!addressPattern.test(userData.street)) {
+      newErrors.street = "Inserisci un indirizzo valido";
+      setIsValid(false);
+    }
+
+    // Validazione Codice postale
+    const postalCodePattern = /^\d{5,}$/;
+    if (userData.postalCode.trim() === "" || !postalCodePattern.test(userData.postalCode)) {
+      newErrors.postalCode = "Inserisci un codice postale valido";
+      setIsValid(false);
+    }
+
+    // Validazione Città
+    const cityPattern = /^[A-Z][a-zA-ZÀ-ÿ\s']{2,}$/;
+    if (userData.city.trim() === "" || !cityPattern.test(userData.city)) {
+      newErrors.city = "Inserisci una città valida";
+      setIsValid(false);
+    }
   
+    setErrors(newErrors);
+
+    const errorLength = Object.keys(newErrors).length
+    
+    return errorLength;
+  };
+
+  // Submit CheckOutForm
+  const handleFormSubmit = (userDataFromChild, event) => {
+    console.log("Hello from child data", userDataFromChild);
+    handleModalAction('submitOrder', event);
+  }
+
   // Restituiamo il componente utilizzando createPortal per montarlo in un nodo separato del DOM
   return createPortal(
     <dialog id="modal" ref={dialog} className="modal">
       <form method="dialog" className="modal-form">
         {buyStep === "openCart" && <Cart title="Your Cart" totalCartPrice={totalCartPrice}/>}
-        {buyStep === "goToCheckout" && <CheckOutForm title = "Checkout" totalCartPrice={totalCartPrice} />} 
+        {buyStep === "goToCheckout" && <CheckOutForm title = "Checkout" totalCartPrice={totalCartPrice} shouldValidate={shouldValidate} onSubmit={handleFormSubmit} userdata={userData} setUserData/>} 
         {buyStep === "submitOrder" && <Success title = "Success"/>}
         {modalActions}
       </form>
