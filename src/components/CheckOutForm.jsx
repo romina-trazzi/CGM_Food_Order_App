@@ -106,7 +106,6 @@ function CheckOutForm({title, totalCartPrice, onSubmit, shouldValidate}) {
     return errorLength;
   };
 
-
   useEffect(() => {
 
     if (shouldValidate) {

@@ -106,7 +106,7 @@ const Modal = forwardRef(function Modal({}, ref) {
     }
   }
 
-  function handleValidate(event) {
+  function handleValidate() {
     setShouldValidate(true)
   }
 
@@ -130,7 +130,7 @@ const Modal = forwardRef(function Modal({}, ref) {
     modalActions = (
     <ModalActions>
       <CloseModalButton type="button" onClick={(event) => handleModalAction('close', event)}>Close</CloseModalButton>
-      <SubmitOrderButton type="submit" onClick={(event) => handleValidate(event)}>Submit Order</SubmitOrderButton>
+      <SubmitOrderButton type="submit" onClick={handleValidate}>Submit Order</SubmitOrderButton>
     </ModalActions>
     )
   }
