@@ -74,7 +74,7 @@ const Modal = forwardRef(function Modal({}, ref) {
   const [totalCartPrice, setTotalCartPrice] = useState(0);
   const [buyStep, setBuyStep] = useState("openCart");
   const [shouldValidate, setShouldValidate] = useState(false);
-  const { meals } = useContext(CartContext);
+  const { meals, clearCart } = useContext(CartContext);
   const cartMealsQuantity = meals.length;
 
 
@@ -97,17 +97,13 @@ const Modal = forwardRef(function Modal({}, ref) {
   
   // Handling modal actions 
   function handleModalAction(buyStepAction, event) {
-    event.preventDefault();
+    event && event.preventDefault();
     dialog.current.showModal();
     setBuyStep(buyStepAction);
     
     if (buyStepAction === "close") {
       dialog.current.close();
     }
-  }
-
-  function handleValidate() {
-    setShouldValidate(true)
   }
 
   // Setting modal action buttons
@@ -152,18 +148,32 @@ const Modal = forwardRef(function Modal({}, ref) {
     setTotalCartPrice(calculateTotalPrice());
   }, [meals]);
 
-  // Submit CheckOutForm
-  const handleFormSubmit = (userDataFromChild, event) => {
-    console.log("Hello from child data", userDataFromChild);
-    handleModalAction('submitOrder', event);
+
+  // Handling form validation
+  function handleValidate() {
+    setShouldValidate(true)
   }
+  
+  const handleFormSubmit = (userDataFromChild) => {
+    console.log("Hello from child data", userDataFromChild);
+    handleModalAction("submitOrder");
+    setShouldValidate(false);
+
+    // Reset shopping cart after sending data
+    clearCart();
+    setTotalCartPrice(0); 
+    setBuyStep("openCart");
+
+    
+  }
+
 
   // Restituiamo il componente utilizzando createPortal per montarlo in un nodo separato del DOM
   return createPortal(
     <dialog id="modal" ref={dialog} className="modal">
-      <form method="dialog" className="modal-form" onSubmit={(event) => handleFormSubmit()}>
+      <form method="dialog" className="modal-form">
         {buyStep === "openCart" && <Cart title="Your Cart" totalCartPrice={totalCartPrice}/>}
-        {buyStep === "goToCheckout" && <CheckOutForm title = "Checkout" totalCartPrice={totalCartPrice} shouldValidate={shouldValidate} onSubmit={handleFormSubmit}/>} 
+        {buyStep === "goToCheckout" && <CheckOutForm title = "Checkout" totalCartPrice={totalCartPrice} onSubmit={handleFormSubmit} shouldValidate={shouldValidate} setShouldValidate={setShouldValidate}/>} 
         {buyStep === "submitOrder" && <Success title = "Success"/>}
         {modalActions}
       </form>

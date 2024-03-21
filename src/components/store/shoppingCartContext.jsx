@@ -9,6 +9,7 @@ export const CartContext = createContext(
         meals: [],
         addItemToCart: () => {},
         updateMealQuantity: () => {},
+        clearCart: () => {},
     }
 );
 
@@ -20,6 +21,7 @@ Se non li mettiamo l'applicazione funziona lo stesso ma diventa più difficile *
 // 2. Definiamo la funzione Reducer --> Funzioni di aggiornamento dello stato (come se fossero setState)
 function shoppingCartReducer(state, action) {
 
+   
     if (action.type === 'ADD_MEAL') {
 
     // Importa e assegna il meal selezionato (viene passato da addItemToCart che prende come argomento il meal al click del button)
@@ -70,6 +72,13 @@ function shoppingCartReducer(state, action) {
         };
     }
 
+    if (action.type === "CLEAR_CART") {
+        return {
+            ...state,
+            meals: []
+        };
+    }
+
     // Lo stato rimane invariato (ex-prev) per azioni non riconosciute
     return state;
 }
@@ -108,11 +117,18 @@ export default function CartContextProvider({children}) {
         })
     }
 
+    function handleClearCart() {
+        shoppingCartDispatch({
+        type: "CLEAR_CART",
+        });
+    }
+
     // 3.2 Creiamo un oggetto di raccolta dei dati e delle funzioni che saranno accessibili da tutti i componenti figli
     const ctxValue = {
         meals: shoppingCartState.meals,
         addItemToCart: handleAddMealToCart,
         updateMealQuantity: handleUpdateMealQuantity,
+        clearCart: handleClearCart,
     }
 
     return (
