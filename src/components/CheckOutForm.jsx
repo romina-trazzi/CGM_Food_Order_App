@@ -36,6 +36,7 @@ export const Row = styled.div`
 
 function CheckOutForm({title, totalCartPrice, onSubmit, shouldValidate}) {
 
+  const [userData, setUserData] = useState({fullName: "", email: "", street: "", postalCode: "", city: ""});
   const [errors, setErrors] = useState({});
   const [isValid, setIsValid] = useState(false);
 
@@ -47,7 +48,63 @@ function CheckOutForm({title, totalCartPrice, onSubmit, shouldValidate}) {
     }));
   };
 
+  // Form validation
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Validazione Nome completo
+    const fullNamePattern = /^[A-Z][a-z]{2,} [A-Z][a-z]{2,}$/;
+    if (userData.fullName.trim() === "") {
+      newErrors.fullName = "Inserisci nome e cognome";
+      setIsValid(false);
+    } else if(!userData.fullName.includes(" ")) {
+      newErrors.fullName = "Inserisci sia il nome che il cognome";
+      setIsValid(false);
+    } else if(!fullNamePattern.test(userData.fullName)) {
+      newErrors.fullName = "Inserisci un nome e un cognome validi";
+      setIsValid(false);
+    }
+    
+    // Validazione Indirizzo email
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (userData.email.trim() === "") {
+      newErrors.email = "Inserisci il tuo indirizzo email";
+      setIsValid(false);
+    } else if (!emailPattern.test(userData.email)) {
+      newErrors.email = "Inserisci un'email valida";
+      setIsValid(false);
+    }
+
+    // Validazione Indirizzo
+    const addressPattern = /^(Via|Viale|Piazza|Corso|Largo)\s[A-Za-zÀ-ÖØ-öø-ÿ]+\s\d+$/;
+    if (userData.street.trim() === "") {
+      newErrors.street = "Inserisci il tuo indirizzo";
+      setIsValid(false);
+    } else if(!addressPattern.test(userData.street)) {
+      newErrors.street = "Inserisci un indirizzo valido";
+      setIsValid(false);
+    }
+
+    // Validazione Codice postale
+    const postalCodePattern = /^\d{5,}$/;
+    if (userData.postalCode.trim() === "" || !postalCodePattern.test(userData.postalCode)) {
+      newErrors.postalCode = "Inserisci un codice postale valido";
+      setIsValid(false);
+    }
+
+    // Validazione Città
+    const cityPattern = /^[A-Z][a-zA-ZÀ-ÿ\s']{2,}$/;
+    if (userData.city.trim() === "" || !cityPattern.test(userData.city)) {
+      newErrors.city = "Inserisci una città valida";
+      setIsValid(false);
+    }
   
+    setErrors(newErrors);
+
+    const errorLength = Object.keys(newErrors).length
+    
+    return errorLength;
+  };
 
 
   useEffect(() => {
