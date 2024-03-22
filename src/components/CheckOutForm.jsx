@@ -115,22 +115,22 @@ function CheckOutForm({title, totalCartPrice, onSubmit, shouldValidate, setShoul
       <span style={{ marginLeft: "0.5rem", marginBottom: "1rem" }}> Total amount: ${totalCartPrice}</span>
 
       <Label>Full Name</Label>
-      <Input type="text" required name="fullName" value={userData.fullName} onChange={handleChange}/>
+      <Input type="text" required name="fullName" value={userData.fullName} onChange={handleChange} id="fullname"/>
 
       <Label>E-Mail Address</Label>
-      <Input type="email" required name="email" value={userData.email} onChange={handleChange}/>
+      <Input type="email" required name="email" value={userData.email} onChange={handleChange} id="email"/>
  
       <Label>Street</Label>
-      <Input type="text" required name="street" value={userData.street} onChange={handleChange}/>
+      <Input type="text" required name="street" value={userData.street} onChange={handleChange} id="street"/>
 
       <Row>
         <div>
           <Label>Postal Code</Label>
-          <Input type="text" required style={{ marginTop: "0.5rem" }} name="postalCode" value={userData.postalCode} onChange={handleChange}/>
+          <Input type="text" required style={{ marginTop: "0.5rem" }} name="postalCode" value={userData.postalCode} onChange={handleChange} id="postal-code" />
         </div>
         <div>
           <Label>City</Label>
-          <Input type="text" required style={{ marginTop: "0.5rem" }} name="city"  value={userData.city} onChange={handleChange}/>
+          <Input type="text" required style={{ marginTop: "0.5rem" }} name="city"  value={userData.city} onChange={handleChange} id="city"/>
         </div>
       </Row>
     </FormContainer>

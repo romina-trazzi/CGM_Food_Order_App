@@ -13,8 +13,6 @@ export const SuccessParagraph = styled.p`
 
 function Success({title}) {
 
-  
-  
   return (
     <div>
       <Title style={{marginLeft: "0.5rem"}}>{title}</Title>

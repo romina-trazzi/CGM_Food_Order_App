@@ -5,6 +5,7 @@ import Cart from './Cart';
 import CheckOutForm from './CheckOutForm'
 import Success from './Success'
 import { CartContext } from './store/shoppingCartContext.jsx';
+import { sendUserOrder } from '../http.js'
 
 export const ModalActions = styled.div`
   display: flex;
@@ -154,8 +155,10 @@ const Modal = forwardRef(function Modal({}, ref) {
     setShouldValidate(true)
   }
   
+
+  // Submit form data to backend
   const handleFormSubmit = (userDataFromChild) => {
-    console.log("Hello from child data", userDataFromChild);
+    sendUserOrder(userDataFromChild, meals);
     handleModalAction("submitOrder");
     setShouldValidate(false);
 
@@ -163,8 +166,6 @@ const Modal = forwardRef(function Modal({}, ref) {
     clearCart();
     setTotalCartPrice(0); 
     setBuyStep("openCart");
-
-    
   }
 
 
@@ -184,3 +185,7 @@ const Modal = forwardRef(function Modal({}, ref) {
 });
 
 export default Modal;
+
+
+
+
