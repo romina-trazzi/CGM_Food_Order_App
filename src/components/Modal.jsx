@@ -1,5 +1,4 @@
 import { forwardRef, useImperativeHandle, useRef, useState, useContext, useEffect } from 'react';
-import styled from 'styled-components';
 import { createPortal } from 'react-dom';
 import Cart from './Cart';
 import CheckOutForm from './CheckOutForm'
@@ -7,76 +6,13 @@ import Success from './Success'
 import { CartContext } from './store/shoppingCartContext.jsx';
 import { sendUserOrder } from '../http.js'
 
-export const ModalActions = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-`
-export const CheckoutButton = styled.button`
-  font: inherit;
-  cursor: pointer;
-  background-color: #ffc404;
-  border: 1px solid #ffc404;
-  color: #1f1a09;
-  padding: 0.5rem 1.5rem;
-  border-radius: 4px;
-
-  &:hover, &:active {
-    background-color: #ffab04;
-    border-color: #ffab04;
-    color: #1f1a09;
-  }
-`
-export const CloseModalButton = styled.button`
-  font: inherit;
-  cursor: pointer;
-  background-color: transparent;
-  border: none;
-  color: #1d1a16;
-
-  &:hover, &:active {
-    color: #312c1d;
-  }
-
-`
-export const SubmitOrderButton = styled.button`
-  font: inherit;
-  cursor: pointer;
-  background-color: #ffc404;
-  border: 1px solid #ffc404;
-  color: #1f1a09;
-  padding: 0.5rem 1.5rem;
-  border-radius: 4px;
-
-  &:hover, &:active {
-    background-color: #ffab04;
-    border-color: #ffab04;
-    color: #1f1a09;
-  }
-`
-export const OkayButton = styled.button`
-  font: inherit;
-  cursor: pointer;
-  background-color: #ffc404;
-  border: 1px solid #ffc404;
-  color: #1f1a09;
-  padding: 0.5rem 1.5rem;
-  border-radius: 4px;
-
-  &:hover, &:active {
-    background-color: #ffab04;
-    border-color: #ffab04;
-    color: #1f1a09;
-  }
-`
 
 const Modal = forwardRef(function Modal({}, ref) {
   const dialog = useRef();
-  const [totalCartPrice, setTotalCartPrice] = useState(0);
-  const [buyStep, setBuyStep] = useState("openCart");
-  const [shouldValidate, setShouldValidate] = useState(false);
   const { meals, clearCart } = useContext(CartContext);
   const cartMealsQuantity = meals.length;
+  const [totalCartPrice, setTotalCartPrice] = useState(0);
+  const [buyStep, setBuyStep] = useState("openCart");
 
 
   useImperativeHandle(ref, () => {
@@ -95,50 +31,6 @@ const Modal = forwardRef(function Modal({}, ref) {
       }
     };
   });
-  
-  // Handling modal actions 
-  function handleModalAction(buyStepAction, event) {
-    event && event.preventDefault();
-    dialog.current.showModal();
-    setBuyStep(buyStepAction);
-    
-    if (buyStepAction === "close") {
-      dialog.current.close();
-    }
-  }
-
-  // Setting modal action buttons
-  let modalActions = (
-    <ModalActions>
-      <CloseModalButton type="button" onClick={(event) => handleModalAction('close', event)}>Close</CloseModalButton>
-    </ModalActions>
-  )
-
-  if (buyStep === "openCart" && cartMealsQuantity > 0) {
-    modalActions = (
-    <ModalActions>
-      <CloseModalButton type="button" onClick={(event) => handleModalAction('close', event)}>Close</CloseModalButton>
-      <CheckoutButton onClick={(event) => handleModalAction('goToCheckout', event)} type="button">Go to Checkout</CheckoutButton>
-    </ModalActions>
-    )
-  };
-
-  if (buyStep === "goToCheckout") {
-    modalActions = (
-    <ModalActions>
-      <CloseModalButton type="button" onClick={(event) => handleModalAction('close', event)}>Close</CloseModalButton>
-      <SubmitOrderButton type="submit" onClick={handleValidate}>Submit Order</SubmitOrderButton>
-    </ModalActions>
-    )
-  }
-
-  if (buyStep === "submitOrder") {
-    modalActions = (
-    <ModalActions>
-      <OkayButton type="button" onClick={(event) => handleModalAction('close', event)}>Okay</OkayButton>
-    </ModalActions>
-    )
-  }
 
   const calculateTotalPrice = () => {
     return +(meals.reduce((acc, meal) => acc + meal.price * meal.quantity, 0).toFixed(2));
@@ -149,39 +41,77 @@ const Modal = forwardRef(function Modal({}, ref) {
     setTotalCartPrice(calculateTotalPrice());
   }, [meals]);
 
+  // Handle setBuystep from children to parent (bottom-up props)
+  const handleSetBuyStep = (buyStep, event) => {
+    event.preventDefault();
+    dialog.current.showModal();
+    setBuyStep(buyStep);
 
-  // Handling form validation
-  function handleValidate() {
-    setShouldValidate(true)
+    if (buyStep === "close") {
+      dialog.current.close();
+    }
+
+    return buyStep;
+  };
+
+  // Handle modal actions
+  const handleModalActions = (buyStepAction, event) => {
+    event.preventDefault() 
+    dialog.current.showModal();
+    setBuyStep(buyStepAction);
+    
+    if (buyStepAction === "close") {
+      dialog.current.close();
+    }
   }
-  
 
   // Submit form data to backend
   const handleFormSubmit = (userDataFromChild) => {
-    sendUserOrder(userDataFromChild, meals);
-    handleModalAction("submitOrder");
-    setShouldValidate(false);
-
-    // Reset shopping cart after sending data
-    clearCart();
+    console.log("Da Modal",  userDataFromChild, meals);
+  
+    // sendUserOrder(userDataFromChild, meals);
+  
+    // Reset shoppingcart
+    clearCart();    
     setTotalCartPrice(0); 
-    setBuyStep("openCart");
   }
 
 
-  // Restituiamo il componente utilizzando createPortal per montarlo in un nodo separato del DOM
+  let modalContent;
+  switch (buyStep) {
+    case "openCart":
+      modalContent = <Cart title="Your Cart" totalCartPrice={totalCartPrice} cartMealsQuantity={cartMealsQuantity} onHandleSetBuyStep={handleSetBuyStep}/>;
+      break;
+    case "openCheckout":
+      modalContent = <CheckOutForm title="Checkout" totalCartPrice={totalCartPrice} onHandleSetBuyStep={handleSetBuyStep} onSubmit={handleFormSubmit} 
+     />;
+      break;
+    case "success":
+      modalContent = <Success title="Success" onHandleSetBuyStep={handleSetBuyStep}/>;
+      break;
+    default:
+      modalContent = <Cart title="Your Cart" totalCartPrice={totalCartPrice} cartMealsQuantity={cartMealsQuantity} onHandleSetBuyStep={handleSetBuyStep}/>;
+  }
+
+
+
+
+
+
+  // createPortal mounts the component in a separate DOM node with id "modal"
   return createPortal(
-    <dialog id="modal" ref={dialog} className="modal">
-      <form method="dialog" className="modal-form">
-        {buyStep === "openCart" && <Cart title="Your Cart" totalCartPrice={totalCartPrice}/>}
-        {buyStep === "goToCheckout" && <CheckOutForm title = "Checkout" totalCartPrice={totalCartPrice} onSubmit={handleFormSubmit} shouldValidate={shouldValidate} setShouldValidate={setShouldValidate}/>} 
-        {buyStep === "submitOrder" && <Success title = "Success"/>}
-        {modalActions}
-      </form>
-    </dialog>,
+  <dialog id="modal" ref={dialog} className="modal">
+    <form method="dialog" className="modal-form">
+      {modalContent}
+    </form>
+  </dialog>,
   // Montiamo il dialog nel nodo del DOM con ID 'modal'
   document.getElementById('modal')
-  );
+);
+      
+    
+
+
 });
 
 export default Modal;

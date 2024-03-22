@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export const Title = styled.h2`
   font-weight: bold;
@@ -33,9 +33,41 @@ export const Row = styled.div`
   margin-bottom: 1rem;
   gap: 1rem;
 `;
+export const RowEnd = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+`;
+export const CloseModalButton = styled.button`
+  font: inherit;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  color: #1d1a16;
 
-function CheckOutForm({title, totalCartPrice, onSubmit, shouldValidate, setShouldValidate}) {
+  &:hover, &:active {
+    color: #312c1d;
+  }
 
+`
+export const SubmitOrderButton = styled.button`
+  font: inherit;
+  cursor: pointer;
+  background-color: #ffc404;
+  border: 1px solid #ffc404;
+  color: #1f1a09;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+
+  &:hover, &:active {
+    background-color: #ffab04;
+    border-color: #ffab04;
+    color: #1f1a09;
+  }
+`
+
+
+function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
   const [userData, setUserData] = useState({fullName: "", email: "", street: "", postalCode: "", city: ""});
   const [errors, setErrors] = useState({});
   
@@ -48,6 +80,8 @@ function CheckOutForm({title, totalCartPrice, onSubmit, shouldValidate, setShoul
     }));
   };
 
+
+  
   // Form validation
   const validateForm = () => {
     const newErrors = {};
@@ -96,18 +130,24 @@ function CheckOutForm({title, totalCartPrice, onSubmit, shouldValidate, setShoul
     return errorLength;
   };
 
-  useEffect(() => {
-    if (shouldValidate) {
+  
+  // Check form validation and sending data to parent compoent
+  const sendModalAction = (event, buyStepAction) => {
+    
+    if (buyStepAction === "success") {
       const errorNumber = validateForm();
+
       if (errorNumber === 0) {
         onSubmit(userData);
+        setTimeout(() => {
+          onHandleSetBuyStep(buyStepAction, event);
+        }, 2000);
       } else {
         console.log("Errori:", errors);
         setErrors({});
       }
-      setShouldValidate(false); 
     }
-  }, [shouldValidate]);
+  }
 
   return (
     <FormContainer>
@@ -133,6 +173,13 @@ function CheckOutForm({title, totalCartPrice, onSubmit, shouldValidate, setShoul
           <Input type="text" required style={{ marginTop: "0.5rem" }} name="city"  value={userData.city} onChange={handleChange} id="city"/>
         </div>
       </Row>
+
+      <RowEnd>
+        <CloseModalButton type="button" onClick={(event) => sendModalAction(event, 'close')}>Close</CloseModalButton>
+        <SubmitOrderButton type="submit" onClick={(event) => sendModalAction(event, 'success')}>Submit Order</SubmitOrderButton>
+      </RowEnd>
+
+
     </FormContainer>
   );
 }

@@ -47,8 +47,40 @@ export const Title = styled.h2`
   font-weight: bold;
   font-size: 1.5rem;
 `
+export const ModalActions = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+`
+export const CheckoutButton = styled.button`
+  font: inherit;
+  cursor: pointer;
+  background-color: #ffc404;
+  border: 1px solid #ffc404;
+  color: #1f1a09;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
 
-function Cart({title, totalCartPrice}) {
+  &:hover, &:active {
+    background-color: #ffab04;
+    border-color: #ffab04;
+    color: #1f1a09;
+  }
+`
+export const CloseModalButton = styled.button`
+  font: inherit;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  color: #1d1a16;
+
+  &:hover, &:active {
+    color: #312c1d;
+  }
+
+`
+
+function Cart({title, totalCartPrice, cartMealsQuantity, onHandleSetBuyStep}) {
   const { meals, updateMealQuantity } = useContext(CartContext);
 
   const handleIncrementQuantity = (event, mealId) => {
@@ -77,6 +109,10 @@ function Cart({title, totalCartPrice}) {
     }
   };
 
+  const sendModalAction = (event, buyStepAction) => {
+    onHandleSetBuyStep(buyStepAction, event);
+  }
+
   return (
     <div>
       <Title style={{marginLeft: "0.5rem"}}>{title}</Title>
@@ -98,10 +134,17 @@ function Cart({title, totalCartPrice}) {
         </MealList>
       )}
       <MealCartTotal><strong>${totalCartPrice}</strong></MealCartTotal>
+      {cartMealsQuantity === 0 ? 
+        <ModalActions>
+          <CloseModalButton type="button" onClick={(event) => sendModalAction(event, 'close')}>Close</CloseModalButton>
+        </ModalActions> :
+        <ModalActions>
+          <CloseModalButton type="button" onClick={(event) => sendModalAction(event, 'close')}>Close</CloseModalButton>
+          <CheckoutButton onClick={(event) => sendModalAction(event, 'openCheckout')} type="button">Go to Checkout</CheckoutButton>
+        </ModalActions>
+      }
     </div>
   );
 }
 
-export default Cart;
-
-
+export default Cart
