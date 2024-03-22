@@ -1,5 +1,4 @@
 import fs from "node:fs/promises";
-
 import bodyParser from "body-parser";
 import express from "express";
 
@@ -26,6 +25,7 @@ app.get("/meals", async (req, res) => {
 
 app.post("/orders", async (req, res) => {
   const orderData = req.body.order;
+
   if (
     orderData === null ||
     orderData.items === null ||
@@ -37,7 +37,7 @@ app.post("/orders", async (req, res) => {
   if (
     orderData.customer.email === null ||
     !orderData.customer.email.includes("@") ||
-    orderData.customer.fullNname === null ||
+    orderData.customer.fullName === null ||
     orderData.customer.fullName.trim() === "" ||
     orderData.customer.street === null ||
     orderData.customer.street.trim() === "" ||
@@ -52,15 +52,30 @@ app.post("/orders", async (req, res) => {
     });
   }
 
-  const newOrder = {
-    ...orderData,
-    id: (Math.random() * 1000).toString(),
-  };
-  const orders = await fs.readFile("./data/orders.json", "utf8");
-  const allOrders = JSON.parse(orders);
-  allOrders.push(newOrder);
-  await fs.writeFile("./data/orders.json", JSON.stringify(allOrders));
-  res.status(201).json({ message: "Order created!" });
+  try {
+    const newOrder = {
+      ...orderData,
+      id: (Math.random() * 1000).toString(),
+    };
+
+    // Read and pars data .js --> .json
+    const orders = await fs.readFile("./data/orders.json", "utf8");
+    const allOrders = JSON.parse(orders);
+
+  
+    // Add new order
+    allOrders.push(newOrder);
+
+    // Write data on order.json
+    await fs.writeFile("./data/orders.json", JSON.stringify(allOrders));
+    res.status(201).json({ message: "Order created!" });
+  
+  
+  } catch (error) {
+    console.error("Errore durante l'operazione di scrittura del file:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+  
 });
 
 app.use((req, res) => {
@@ -81,3 +96,33 @@ app.get("/orders", async (req, res) => {
 });
 
 app.listen(3000);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+   

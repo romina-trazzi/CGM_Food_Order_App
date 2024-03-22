@@ -141,7 +141,7 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
         onSubmit(userData);
         setTimeout(() => {
           onHandleSetBuyStep(buyStepAction, event);
-        }, 2000);
+        }, 4000);
       } else {
         console.log("Errori:", errors);
         setErrors({});

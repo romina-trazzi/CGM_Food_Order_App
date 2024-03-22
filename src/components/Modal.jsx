@@ -65,16 +65,19 @@ const Modal = forwardRef(function Modal({}, ref) {
     }
   }
 
-  // Submit form data to backend
-  const handleFormSubmit = (userDataFromChild) => {
-    console.log("Da Modal",  userDataFromChild, meals);
-  
-    // sendUserOrder(userDataFromChild, meals);
-  
-    // Reset shoppingcart
-    clearCart();    
-    setTotalCartPrice(0); 
-  }
+  // Submit form data to backend and reset shopping cart 
+  const handleFormSubmit = async (userDataFromChild) => {
+    try {
+      await sendUserOrder(meals, userDataFromChild);
+      clearCart();
+      setTotalCartPrice(0);
+      
+    } catch (error) {
+      
+      clearCart();
+      setTotalCartPrice(0);
+    }
+  };
 
 
   let modalContent;
@@ -92,10 +95,6 @@ const Modal = forwardRef(function Modal({}, ref) {
     default:
       modalContent = <Cart title="Your Cart" totalCartPrice={totalCartPrice} cartMealsQuantity={cartMealsQuantity} onHandleSetBuyStep={handleSetBuyStep}/>;
   }
-
-
-
-
 
 
   // createPortal mounts the component in a separate DOM node with id "modal"
