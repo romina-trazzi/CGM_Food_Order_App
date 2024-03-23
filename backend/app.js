@@ -51,30 +51,34 @@ app.post("/orders", async (req, res) => {
         "Missing data: Email, name, street, postal code or city is missing.",
     });
   }
-
+  
   try {
-    const newOrder = {
-      ...orderData,
-      id: (Math.random() * 1000).toString(),
-    };
-
-    // Read and pars data .js --> .json
-    const orders = await fs.readFile("./data/orders.json", "utf8");
-    const allOrders = JSON.parse(orders);
-
+  let allOrders = [];
   
-    // Add new order
-    allOrders.push(newOrder);
+  const newOrder = {
+    ...orderData,
+    id: (Math.random() * 1000).toString(),
+  };
 
-    // Write data on order.json
-    await fs.writeFile("./data/orders.json", JSON.stringify(allOrders));
-    res.status(201).json({ message: "Order created!" });
+  // Read data from orders.json
+  const orders = await fs.readFile("./data/orders.json", "utf8");
   
-  
-  } catch (error) {
-    console.error("Errore durante l'operazione di scrittura del file:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+  // If orders.json is not empty, parse it as an array
+  if (orders) {
+    allOrders = JSON.parse(orders);
   }
+
+  // Add new order
+  allOrders.push(newOrder);
+
+  // Write data to orders.json
+  await fs.writeFile("./data/orders.json", JSON.stringify(allOrders));
+  res.status(201).json({ message: "Order created!" });
+
+} catch (error) {
+  console.error("Errore durante l'operazione di scrittura del file:", error);
+  res.status(500).json({ message: "Internal Server Error" });
+}
   
 });
 

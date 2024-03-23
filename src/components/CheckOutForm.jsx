@@ -141,7 +141,7 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
         onSubmit(userData);
         setTimeout(() => {
           onHandleSetBuyStep(buyStepAction, event);
-        }, 4000);
+        }, 2000);
       } else {
         console.log("Errori:", errors);
         setErrors({});
@@ -150,6 +150,7 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
   }
 
   return (
+    <>
     <FormContainer>
       <Title>{title}</Title>
       <span style={{ marginLeft: "0.5rem", marginBottom: "1rem" }}> Total amount: ${totalCartPrice}</span>
@@ -173,14 +174,12 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
           <Input type="text" required style={{ marginTop: "0.5rem" }} name="city"  value={userData.city} onChange={handleChange} id="city"/>
         </div>
       </Row>
-
-      <RowEnd>
-        <CloseModalButton type="button" onClick={(event) => sendModalAction(event, 'close')}>Close</CloseModalButton>
-        <SubmitOrderButton type="submit" onClick={(event) => sendModalAction(event, 'success')}>Submit Order</SubmitOrderButton>
-      </RowEnd>
-
-
     </FormContainer>
+    <RowEnd>
+      <CloseModalButton type="button" onClick={(event) => sendModalAction(event, 'close')}>Close</CloseModalButton>
+      <SubmitOrderButton type="submit" onClick={(event) => sendModalAction(event, 'success')}>Submit Order</SubmitOrderButton>
+    </RowEnd>
+    </>
   );
 }
 
