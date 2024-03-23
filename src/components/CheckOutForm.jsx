@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+import { FaExclamation } from "react-icons/fa";
+
 
 export const Title = styled.h2`
   font-weight: bold;
@@ -23,6 +25,11 @@ export const Input = styled.input`
   margin-left: 0.5rem; 
   border-radius: 4px;
   border: 1px solid #ccc;
+
+  &.red {
+    background-color: lightcoral;
+    border-color: red;
+  }
 `
 export const Row = styled.div`
   display: flex;
@@ -82,18 +89,17 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
   const validateForm = () => {
     const newErrors = {};
 
-    // Validazione Nome completo
+    // Fullname validation
     const fullNamePattern = /^[A-Z][a-z]{2,} [A-Z][a-z]{2,}$/;
     if (userData.fullName.trim() === "") {
       newErrors.fullName = "Inserisci nome e cognome";
-      setIsValid(false);
     } else if(!userData.fullName.includes(" ")) {
       newErrors.fullName = "Inserisci sia il nome che il cognome";
     } else if(!fullNamePattern.test(userData.fullName)) {
       newErrors.fullName = "Inserisci un nome e un cognome validi";
     }
     
-    // Validazione Indirizzo email
+    // Email validation
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (userData.email.trim() === "") {
       newErrors.email = "Inserisci il tuo indirizzo email";
@@ -101,7 +107,7 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
       newErrors.email = "Inserisci un'email valida";
     }
 
-    // Validazione Indirizzo
+    // Address validation
     const addressPattern = /^(Via|Viale|Piazza|Corso|Largo)\s[A-Za-zÀ-ÖØ-öø-ÿ]+\s\d+$/;
     if (userData.street.trim() === "") {
       newErrors.street = "Inserisci il tuo indirizzo";
@@ -109,20 +115,25 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
       newErrors.street = "Inserisci un indirizzo valido";
     }
 
-    // Validazione Codice postale
+    // Postal code validation
     const postalCodePattern = /^\d{5,}$/;
     if (userData.postalCode.trim() === "" || !postalCodePattern.test(userData.postalCode)) {
       newErrors.postalCode = "Inserisci un codice postale valido";
     }
 
-    // Validazione Città
+    // City validation
     const cityPattern = /^[A-Z][a-zA-ZÀ-ÿ\s']{2,}$/;
     if (userData.city.trim() === "" || !cityPattern.test(userData.city)) {
       newErrors.city = "Inserisci una città valida";
     }
-  
-    setErrors(newErrors);
-    const errorLength = Object.keys(newErrors).length
+      
+    const errorLength = Object.keys(newErrors).length;
+
+    // Aggiorna lo stato degli errori solo se ci sono errori
+    if (errorLength > 0) {
+      setErrors(newErrors);
+    };
+    
     return errorLength;
   };
 
@@ -138,9 +149,15 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
           onHandleSetBuyStep(buyStepAction, event);
         }, 2000);
       } else {
-        console.log("Errori:", errors);
-        setErrors({});
+
+        for (const error in errors) {
+          if (errors.hasOwnProperty(error)) {
+            // alert("Il campo errato è: " + error + " " + errors[error]);
+            
+          }
+        }
       }
+      
     } else {
       onHandleSetBuyStep(buyStepAction, event);
     }
@@ -153,22 +170,22 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
       <span style={{ marginLeft: "0.5rem", marginBottom: "1rem" }}> Total amount: ${totalCartPrice}</span>
 
       <Label>Full Name</Label>
-      <Input type="text" required name="fullName" value={userData.fullName} onChange={handleChange} id="fullname"/>
+      <Input type="text" name="fullName" value={userData.fullName} onChange={handleChange} id="fullname" className={errors.fullName ? "red" : ""} required/>
 
       <Label>E-Mail Address</Label>
-      <Input type="email" required name="email" value={userData.email} onChange={handleChange} id="email"/>
+      <Input type="email" name="email" value={userData.email} onChange={handleChange} id="email" className={errors.email ? "red" : ""} required/>
  
       <Label>Street</Label>
-      <Input type="text" required name="street" value={userData.street} onChange={handleChange} id="street"/>
+      <Input type="text" name="street" value={userData.street} onChange={handleChange} id="street" className={errors.street ? "red" : ""} required/>
 
       <Row>
         <div>
           <Label>Postal Code</Label>
-          <Input type="text" required style={{ marginTop: "0.5rem" }} name="postalCode" value={userData.postalCode} onChange={handleChange} id="postal-code" />
+          <Input type="text" style={{ marginTop: "0.5rem" }} name="postalCode" value={userData.postalCode} onChange={handleChange} id="postal-code" className={errors.postalCode ? "red" : ""} required/>
         </div>
         <div>
           <Label>City</Label>
-          <Input type="text" required style={{ marginTop: "0.5rem" }} name="city"  value={userData.city} onChange={handleChange} id="city"/>
+          <Input type="text" style={{ marginTop: "0.5rem" }} name="city"  value={userData.city} onChange={handleChange} className={errors.city ? "red" : ""} id="city" required/>
         </div>
       </Row>
     </FormContainer>
