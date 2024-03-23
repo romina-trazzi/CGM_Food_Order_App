@@ -1,4 +1,4 @@
-import {useRef, useImperativeHandle} from 'react'
+import {useRef, useImperativeHandle, forwardRef} from 'react'
 import styled from 'styled-components';
 
 const ModalContainer = styled.dialog`
@@ -27,37 +27,35 @@ const CloseButton = styled.button`
   cursor: pointer;
 `
 
-function ModalOrders({}, ref) {
 
-  const modalRef = useRef();
+const ModalOrders = forwardRef(function ModalOrders({isOpen, onClose}, ref) {
+  
+  const dialog = useRef();
 
-  useImperativeHandle(ref, () => {
-    return {
-      // Defining the functions used by Header component (with modalRef.current.actionName)
-      open: () => {
-        dialog.current.showModal();
-      },
 
-      close: () => {
-        dialog.current.close();
-      },
+  useImperativeHandle(ref, () => ({
+    open: () => {
+      dialog.current.showModal();
+    },
+    close: () => {
+      dialog.current.close();
     }
-  });
-
-
+  }));
 
   return (
-    <dialog id="modalOrders" ref={modalRef} className="modal">
+    <dialog id="modalOrders" className="modal" open={isOpen} ref={dialog}>
       <ModalContent>
         <CloseButton onClick={onClose}>X</CloseButton>
         <h2>Elenco Ordini</h2>
         <p>Contenuto dell'elenco degli ordini...</p>
       </ModalContent>
-    </dialog>,
-    document.getElementById('modalOrders')
+    </dialog>
   )
-}
 
+})
+
+
+export default ModalOrders;
 
 
 

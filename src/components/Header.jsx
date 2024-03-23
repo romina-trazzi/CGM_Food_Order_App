@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useRef, useContext } from 'react'
+import { useState, useRef, useContext } from 'react'
 import Modal from './Modal.jsx';
 import ModalOrders from './ModalOrders.jsx';
 import { CartContext } from './store/shoppingCartContext.jsx';
@@ -56,21 +56,18 @@ function Header() {
     const cartMealsQuantity = meals.length;
     const modalRef = useRef();
     const modalOrdersRef = useRef(); 
+    const [isOrdersModalOpen, setIsOrdersModalOpen] = useState(false);
 
     const openModal = (buyStepAction) => {
         modalRef.current.open();
         modalRef.current.setBuyStep(buyStepAction);
     };
 
-    const handleModalOrders = () => {
-        console.log("Cisono");
+    const handleModalOrders = (isOrderModalOpen) => {
+        setIsOrdersModalOpen(!isOrderModalOpen);
         modalOrdersRef.current.open();
     };
 
-
-
-
-     
     return (
         <>
             <Modal ref={modalRef}/>
