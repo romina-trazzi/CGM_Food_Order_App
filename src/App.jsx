@@ -5,17 +5,6 @@ import Header from './components/Header.jsx'
 import Meal from './components/Meal.jsx'
 import CartContextProvider from './components/store/shoppingCartContext.jsx';
 
-export const Main = styled.main `
-  display: flex;
-  justify-content: center;
-`
-export const MealContainer = styled.div`
-  width: 70%;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(7, 1fr);
-  gap: 1rem;
-`
 export const Footer = styled.footer `
  background-color: black;
  color: white;
@@ -24,7 +13,6 @@ export const Footer = styled.footer `
  height: 3rem;
  margin-top: 5rem;
  line-height: 3rem;
-
 `
 
 
@@ -51,11 +39,9 @@ function App() {
   return (
     <CartContextProvider meals={meals}>
       <Header/> 
-      <Main>
-        <MealContainer>
-          <Meal meals={meals}/>
-        </MealContainer>
-      </Main>
+      <main>
+        <Meal meals={meals}/>
+      </main>
       <Footer>Final Project CGM React Course. Made by ~ Romina Trazzi - 2024 ~</Footer>
     </CartContextProvider>
     

@@ -10,25 +10,31 @@ export const HeaderStyle = styled.header `
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 10%;
+    padding: 3rem 10%;
     margin-bottom: 5rem;
     color: gold;
 `
 export const Logo = styled.img `
-    width: 5rem;
+    width: 4rem;
+    height: 4rem;
+    object-fit: contain;
     border-radius: 50%;
-    border: 3px solid gold;
+    border: 2px solid #ffc404;
 `
 export const Title = styled.h2`
-  padding-left: 1rem;
-  font-weight: bold;
-  font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-left: 1rem; 
+    font-weight: bold;
+    font-size: 1.5rem;
 `
 export const ShoppingCartButton = styled.button`
   padding: 1rem;
   background-color: transparent;
   border: 0px;
-  font-size: 1.2rem;
+  font-family: 'Lato', sans-serif;
+  font-size: 1.5rem;
   font-weight: bolder;
   color: gold;
   cursor: pointer;
@@ -44,7 +50,6 @@ function Header() {
         modalRef.current.setBuyStep(buyStepAction);
     };
      
-
     return (
         <>
             <Modal ref={modalRef}/>
