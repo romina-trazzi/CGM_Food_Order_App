@@ -1,5 +1,6 @@
 import { createContext, useReducer} from "react";
 
+
 /* Trattiamo la variabile CartContext come un oggetto che ha
 all'interno un componente React.
 
@@ -96,6 +97,7 @@ export default function CartContextProvider({children}) {
 
     const [shoppingCartState, shoppingCartDispatch] = useReducer(shoppingCartReducer, {meals: []});
 
+   
 
     function handleAddMealToCart(selectedMeal) {
 
@@ -122,6 +124,7 @@ export default function CartContextProvider({children}) {
         type: "CLEAR_CART",
         });
     }
+
 
     // 3.2 Creiamo un oggetto di raccolta dei dati e delle funzioni che saranno accessibili da tutti i componenti figli
     const ctxValue = {

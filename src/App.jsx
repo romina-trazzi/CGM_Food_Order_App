@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { fetchMeals } from './http.js'
+import { fetchMeals } from './http';
 import styled from 'styled-components';
 import Header from './components/Header.jsx'
 import Meal from './components/Meal.jsx'
@@ -15,17 +15,19 @@ export const Footer = styled.footer `
  line-height: 3rem;
 `
 
-
 function App() {
+  const [meals, setMeals] = useState([]);
 
   // Getting initial meals data
   useEffect(() => {
     const fetchData = async () => {
       try {
         const mealsData = await fetchMeals();
+
         // Adding a quantity property settled to 0 
         const updatedMeals = mealsData.map(meal => ({...meal, quantity: 0}));
-        setMeals(updatedMeals)
+        setMeals(updatedMeals);
+
       } catch (error) {
         console.error('Error fetching meals:', error);
       }
@@ -34,17 +36,12 @@ function App() {
   fetchData();
   }, []);
 
-  const [meals, setMeals] = useState([]);
-
   return (
-    <CartContextProvider meals={meals}>
+    <CartContextProvider>
       <Header/> 
-      <main>
-        <Meal meals={meals}/>
-      </main>
+      <Meal meals={meals}/>
       <Footer>Final Project CGM React Course. Made by ~ Romina Trazzi - 2024 ~</Footer>
     </CartContextProvider>
-    
   );
 }
 

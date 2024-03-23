@@ -82,7 +82,7 @@ export const MealRow = styled.li `
 export const MealData = styled.div`
   display: grid; 
   grid-gap: 4rem;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 3fr 1fr;
 `
 // End of different CSS
 
