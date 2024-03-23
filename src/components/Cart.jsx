@@ -2,20 +2,30 @@ import { useContext } from 'react';
 import { CartContext } from './store/shoppingCartContext.jsx';
 import styled from 'styled-components';
 
+
+export const Title = styled.h2`
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin: 1rem 0;
+`
 export const MealList = styled.ul `
   list-style: none;
   margin: 0.5rem 0;
   padding: 0;
-`;
-export const MealRow = styled.li `
-  padding: 0.5rem;
-  padding-right: 0;
-`;
-export const MealData = styled.div`
-  display: grid; 
-  grid-gap: 4rem;
-  grid-template-columns: 1fr 1fr;
-`;
+`
+export const ModalActions = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+`
+export const MealCartTotal = styled.p`
+  display: flex;
+  justify-content: flex-end;
+  margin: 2rem 0;
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: #46443c;
+`
 export const MealUpdateButton = styled.button`
   cursor: pointer;
   font-size: 1rem;
@@ -34,23 +44,18 @@ export const MealUpdateButton = styled.button`
     border-color: #ffab04;
     color: #1f1a09; 
   }
-`;
-export const MealCartTotal = styled.p`
-  display: flex;
-  justify-content: flex-end;
-  margin: 2rem 0;
-  font-size: 1.15rem;
-  font-weight: bold;
-  color: #46443c;
-`;
-export const Title = styled.h2`
-  font-weight: bold;
-  font-size: 1.5rem;
 `
-export const ModalActions = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
+export const CloseModalButton = styled.button`
+  font: inherit;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  color: #1d1a16;
+
+  &:hover, &:active {
+    color: #312c1d;
+  }
+
 `
 export const CheckoutButton = styled.button`
   font: inherit;
@@ -67,18 +72,30 @@ export const CheckoutButton = styled.button`
     color: #1f1a09;
   }
 `
-export const CloseModalButton = styled.button`
-  font: inherit;
-  cursor: pointer;
-  background-color: transparent;
-  border: none;
-  color: #1d1a16;
 
-  &:hover, &:active {
-    color: #312c1d;
-  }
 
+// Different CSS
+export const MealRow = styled.li `
+  padding: 0.5rem;
+  padding-right: 0;
 `
+export const MealData = styled.div`
+  display: grid; 
+  grid-gap: 4rem;
+  grid-template-columns: 1fr 1fr;
+`
+// End of different CSS
+
+
+
+
+
+
+
+
+
+
+
 
 function Cart({title, totalCartPrice, cartMealsQuantity, onHandleSetBuyStep}) {
   const { meals, updateMealQuantity } = useContext(CartContext);

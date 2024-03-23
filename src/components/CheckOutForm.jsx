@@ -5,39 +5,37 @@ export const Title = styled.h2`
   font-weight: bold;
   font-size: 1.5rem;
   margin-left: 0.5rem;
-`;
+`
 export const FormContainer = styled.div`
   margin: 0.5rem 0;
   display: flex;
   flex-direction: column;
-  max-width: 20rem;
-`;
+  max-width: 30rem; 
+`
 export const Label = styled.label`
   font-weight: bold;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  margin-left: 0.5rem;
-`;
+  margin: 0.5rem;
+`
 export const Input = styled.input`
   width: 100%;
   font: inherit;
   padding: 0.5rem;
-  margin-left: 0.5rem;
+  margin-left: 0.5rem; 
   border-radius: 4px;
   border: 1px solid #ccc;
-`;
+`
 export const Row = styled.div`
   display: flex;
   justify-content: flex-start;
+  gap: 1rem;
   margin-top: 0.5rem;
   margin-bottom: 1rem;
-  gap: 1rem;
-`;
+`
 export const RowEnd = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
-`;
+`
 export const CloseModalButton = styled.button`
   font: inherit;
   cursor: pointer;
@@ -80,8 +78,6 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
     }));
   };
 
-
-  
   // Form validation
   const validateForm = () => {
     const newErrors = {};
@@ -130,7 +126,6 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
     return errorLength;
   };
 
-  
   // Check form validation and sending data to parent compoent
   const sendModalAction = (event, buyStepAction) => {
     
@@ -146,6 +141,8 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
         console.log("Errori:", errors);
         setErrors({});
       }
+    } else {
+      onHandleSetBuyStep(buyStepAction, event);
     }
   }
 
