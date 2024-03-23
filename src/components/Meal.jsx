@@ -66,13 +66,13 @@ export const MealButton = styled.button`
   cursor: pointer;
 `
 
-function Meal({meals}) {
+function Meal({initialMeals}) {
   // Consuming useContext inside this component
   const { addItemToCart } = useContext(CartContext);
 
   return (
     <Meals>
-      {meals.map(meal => (
+      {initialMeals.map(meal => (
       <MealCard key={meal.id}>
         <MealImg src={`/backend/public/${meal.image}`}></MealImg>
         <h3>{meal.name}</h3>

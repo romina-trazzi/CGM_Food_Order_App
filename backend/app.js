@@ -27,9 +27,7 @@ app.post("/orders", async (req, res) => {
   const orderData = req.body.order;
 
   if (
-    orderData === null ||
-    orderData.items === null ||
-    orderData.items.length === 0
+    orderData === null || orderData.items === null || orderData.items.length === 0
   ) {
     return res.status(400).json({ message: "Missing data." });
   }
@@ -53,27 +51,27 @@ app.post("/orders", async (req, res) => {
   }
   
   try {
-  let allOrders = [];
-  
-  const newOrder = {
-    ...orderData,
-    id: (Math.random() * 1000).toString(),
-  };
+    let allOrders = [];
+    
+    const newOrder = {
+      ...orderData,
+      id: (Math.random() * 1000).toString(),
+    };
 
-  // Read data from orders.json
-  const orders = await fs.readFile("./data/orders.json", "utf8");
-  
-  // If orders.json is not empty, parse it as an array
-  if (orders) {
-    allOrders = JSON.parse(orders);
-  }
+    // Read data from orders.json
+    const orders = await fs.readFile("./data/orders.json", "utf8");
+    
+    // If orders.json is not empty, parse it as an array
+    if (orders) {
+      allOrders = JSON.parse(orders);
+    }
 
-  // Add new order
-  allOrders.push(newOrder);
+    // Add new order
+    allOrders.push(newOrder);
 
-  // Write data to orders.json
-  await fs.writeFile("./data/orders.json", JSON.stringify(allOrders));
-  res.status(201).json({ message: "Order created!" });
+    // Write data to orders.json
+    await fs.writeFile("./data/orders.json", JSON.stringify(allOrders));
+    res.status(201).json({ message: "Order created!" });
 
 } catch (error) {
   console.error("Errore durante l'operazione di scrittura del file:", error);
@@ -86,7 +84,6 @@ app.use((req, res) => {
   if (req.method === "OPTIONS") {
     return res.sendStatus(200);
   }
-
   res.status(404).json({ message: "Not found" });
 });
 

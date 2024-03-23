@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import { FaExclamation } from "react-icons/fa";
 
 
 export const Title = styled.h2`
@@ -70,7 +69,6 @@ export const SubmitOrderButton = styled.button`
     color: #1f1a09;
   }
 `
-
 
 function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
   const [userData, setUserData] = useState({fullName: "", email: "", street: "", postalCode: "", city: ""});
@@ -153,7 +151,7 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
         for (const error in errors) {
           if (errors.hasOwnProperty(error)) {
             // alert("Il campo errato è: " + error + " " + errors[error]);
-            
+
           }
         }
       }
@@ -170,7 +168,7 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
       <span style={{ marginLeft: "0.5rem", marginBottom: "1rem" }}> Total amount: ${totalCartPrice}</span>
 
       <Label>Full Name</Label>
-      <Input type="text" name="fullName" value={userData.fullName} onChange={handleChange} id="fullname" className={errors.fullName ? "red" : ""} required/>
+      <Input type="text" name="fullName" value={userData.fullName} onChange={handleChange} id="fullname" className={errors.fullName ? "red" : ""} required />
 
       <Label>E-Mail Address</Label>
       <Input type="email" name="email" value={userData.email} onChange={handleChange} id="email" className={errors.email ? "red" : ""} required/>

@@ -88,15 +88,6 @@ export const MealData = styled.div`
 
 
 
-
-
-
-
-
-
-
-
-
 function Cart({title, totalCartPrice, cartMealsQuantity, onHandleSetBuyStep}) {
   const { meals, updateMealQuantity } = useContext(CartContext);
 

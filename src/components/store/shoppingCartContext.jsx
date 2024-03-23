@@ -97,8 +97,6 @@ export default function CartContextProvider({children}) {
 
     const [shoppingCartState, shoppingCartDispatch] = useReducer(shoppingCartReducer, {meals: []});
 
-   
-
     function handleAddMealToCart(selectedMeal) {
 
         shoppingCartDispatch({

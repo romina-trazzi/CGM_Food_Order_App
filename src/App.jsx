@@ -16,30 +16,30 @@ export const Footer = styled.footer `
 `
 
 function App() {
-  const [meals, setMeals] = useState([]);
+  const [initialMeals, setInitialMeals] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const mealsData = await fetchMeals();
+
+      // Adding a quantity property settled to 0 
+      const updatedMeals = mealsData.map(meal => ({...meal, quantity: 0}));
+      setInitialMeals(updatedMeals);
+
+    } catch (error) {
+      console.error('Error fetching meals:', error);
+    }
+  };
 
   // Getting initial meals data
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const mealsData = await fetchMeals();
-
-        // Adding a quantity property settled to 0 
-        const updatedMeals = mealsData.map(meal => ({...meal, quantity: 0}));
-        setMeals(updatedMeals);
-
-      } catch (error) {
-        console.error('Error fetching meals:', error);
-      }
-    };
-
-  fetchData();
+    fetchData();
   }, []);
 
   return (
     <CartContextProvider>
       <Header/> 
-      <Meal meals={meals}/>
+      <Meal initialMeals={initialMeals}/>
       <Footer>Final Project CGM React Course. Made by ~ Romina Trazzi - 2024 ~</Footer>
     </CartContextProvider>
   );

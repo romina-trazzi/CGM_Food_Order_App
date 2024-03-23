@@ -32,15 +32,6 @@ const Modal = forwardRef(function Modal({}, ref) {
     };
   });
 
-  const calculateTotalPrice = () => {
-    return +(meals.reduce((acc, meal) => acc + meal.price * meal.quantity, 0).toFixed(2));
-  };
-
-  // Calculate total price cart every time meals quantity changes
-  useEffect(() => {
-    setTotalCartPrice(calculateTotalPrice());
-  }, [meals]);
-
   // Handle setBuystep from children to parent (bottom-up props)
   const handleSetBuyStep = (buyStep, event) => {
     event.preventDefault();
@@ -54,17 +45,6 @@ const Modal = forwardRef(function Modal({}, ref) {
     return buyStep;
   };
 
-  // Handle modal actions
-  const handleModalActions = (buyStepAction, event) => {
-    event.preventDefault() 
-    dialog.current.showModal();
-    setBuyStep(buyStepAction);
-    
-    if (buyStepAction === "close") {
-      dialog.current.close();
-    }
-  }
-
   // Submit form data to backend and reset shopping cart 
   const handleFormSubmit = async (userDataFromChild) => {
     try {
@@ -73,44 +53,45 @@ const Modal = forwardRef(function Modal({}, ref) {
       setTotalCartPrice(0);
       
     } catch (error) {
-      
       clearCart();
       setTotalCartPrice(0);
     }
   };
 
-
-  let modalContent;
-  switch (buyStep) {
-    case "openCart":
-      modalContent = <Cart title="Your Cart" totalCartPrice={totalCartPrice} cartMealsQuantity={cartMealsQuantity} onHandleSetBuyStep={handleSetBuyStep}/>;
-      break;
-    case "openCheckout":
-      modalContent = <CheckOutForm title="Checkout" totalCartPrice={totalCartPrice} onHandleSetBuyStep={handleSetBuyStep} onSubmit={handleFormSubmit} 
-     />;
-      break;
-    case "success":
-      modalContent = <Success title="Success" onHandleSetBuyStep={handleSetBuyStep}/>;
-      break;
-    default:
-      modalContent = <Cart title="Your Cart" totalCartPrice={totalCartPrice} cartMealsQuantity={cartMealsQuantity} onHandleSetBuyStep={handleSetBuyStep}/>;
+  const returnModalContent = () => {
+    switch (buyStep) {
+      case "openCart":
+        return <Cart title="Your Cart" totalCartPrice={totalCartPrice} cartMealsQuantity={cartMealsQuantity} onHandleSetBuyStep={handleSetBuyStep}/>;
+      case "openCheckout":
+        return <CheckOutForm title="Checkout" totalCartPrice={totalCartPrice} onHandleSetBuyStep={handleSetBuyStep} onSubmit={handleFormSubmit}/>;
+      case "success":
+        return <Success title="Success" onHandleSetBuyStep={handleSetBuyStep}/>;
+      default:
+        return <Cart title="Your Cart" totalCartPrice={totalCartPrice} cartMealsQuantity={cartMealsQuantity} onHandleSetBuyStep={handleSetBuyStep}/>;
+    }
   }
+
+  const calculateTotalPrice = () => {
+    return +(meals.reduce((acc, meal) => acc + meal.price * meal.quantity, 0).toFixed(2));
+  };
+
+  useEffect(() => {
+    setTotalCartPrice(calculateTotalPrice());
+  }, [meals]);
+
 
 
   // createPortal mounts the component in a separate DOM node with id "modal"
   return createPortal(
-  <dialog id="modal" ref={dialog} className="modal">
-    <form method="dialog" className="modal-form">
-      {modalContent}
-    </form>
-  </dialog>,
-  // Montiamo il dialog nel nodo del DOM con ID 'modal'
-  document.getElementById('modal')
-);
+    <dialog id="modal" ref={dialog} className="modal">
+      <form method="dialog" className="modal-form">
+        {returnModalContent()}
+      </form>
+    </dialog>,
+    // Montiamo il dialog nel nodo del DOM con ID 'modal'
+    document.getElementById('modal')
+  );
       
-    
-
-
 });
 
 export default Modal;
