@@ -56,15 +56,13 @@ function Header() {
     const cartMealsQuantity = meals.length;
     const modalRef = useRef();
     const modalOrdersRef = useRef(); 
-    const [isOrdersModalOpen, setIsOrdersModalOpen] = useState(false);
-
-    const openModal = (buyStepAction) => {
+    
+    const openCartModal = (buyStepAction) => {
         modalRef.current.open();
         modalRef.current.setBuyStep(buyStepAction);
     };
 
-    const handleModalOrders = (isOrderModalOpen) => {
-        setIsOrdersModalOpen(!isOrderModalOpen);
+    const openOrdersModal = () => {
         modalOrdersRef.current.open();
     };
 
@@ -77,8 +75,8 @@ function Header() {
                 <Logo src="logo.jpg" alt="Logo"/>
                 <Title>REACTFOOD</Title>
             </div>
-            <OrdersButton onClick={handleModalOrders}> Success Orders </OrdersButton>
-            <ShoppingCartButton onClick={() => openModal("openCart")}> Cart ({cartMealsQuantity}) </ShoppingCartButton>
+            <OrdersButton onClick={openOrdersModal}> Success Orders </OrdersButton>
+            <ShoppingCartButton onClick={() => openCartModal("openCart")}> Cart ({cartMealsQuantity}) </ShoppingCartButton>
             </HeaderStyle>
         </>
     

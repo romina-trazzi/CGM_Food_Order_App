@@ -1,7 +1,7 @@
 import {useRef, useImperativeHandle, forwardRef} from 'react'
 import styled from 'styled-components';
 
-const ModalContainer = styled.dialog`
+export const ModalContainer = styled.dialog`
   position: fixed;
   top: 0;
   left: 0;
@@ -13,12 +13,22 @@ const ModalContainer = styled.dialog`
   align-items: center;
   z-index: 999;
 `
-const ModalContent = styled.div`
+export const Title = styled.h2`
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin: 1rem 0;
+`
+export const OrderList = styled.ul `
+  list-style: none;
+  margin: 0.5rem 0;
+  padding: 0;
+`
+export const ModalContent = styled.div`
   background-color: white;
   padding: 2rem;
   border-radius: 8px;
 `
-const CloseButton = styled.button`
+export const CloseButton = styled.button`
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
@@ -28,26 +38,26 @@ const CloseButton = styled.button`
 `
 
 
-const ModalOrders = forwardRef(function ModalOrders({isOpen, onClose}, ref) {
+const ModalOrders = forwardRef(function ModalOrders({children}, ref) {
   
   const dialog = useRef();
-
 
   useImperativeHandle(ref, () => ({
     open: () => {
       dialog.current.showModal();
     },
-    close: () => {
-      dialog.current.close();
-    }
   }));
 
+  const handleClosing = () => {
+    dialog.current.close();
+  }
+
   return (
-    <dialog id="modalOrders" className="modal" open={isOpen} ref={dialog}>
+    <dialog id="modalOrders" className="modal" ref={dialog}>
       <ModalContent>
-        <CloseButton onClick={onClose}>X</CloseButton>
-        <h2>Elenco Ordini</h2>
-        <p>Contenuto dell'elenco degli ordini...</p>
+        <Title>Elenco degli ordini avvenuti con successo</Title>
+        <OrderList>{children}</OrderList>
+        <CloseButton onClick={handleClosing}>Close</CloseButton>
       </ModalContent>
     </dialog>
   )

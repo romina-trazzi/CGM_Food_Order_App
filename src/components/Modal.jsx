@@ -15,15 +15,12 @@ const Modal = forwardRef(function Modal({}, ref) {
   const [buyStep, setBuyStep] = useState("openCart");
 
 
+  
   useImperativeHandle(ref, () => {
     return {
-      // Defining the functions used by Header component (with modalRef.current.actionName)
+      // Defining methods used by parent component Header (with modalRef.current.actionName)
       open: () => {
         dialog.current.showModal();
-      },
-
-      close: () => {
-        dialog.current.close();
       },
 
       setBuyStep: (buyStep) => {
@@ -55,6 +52,7 @@ const Modal = forwardRef(function Modal({}, ref) {
     } catch (error) {
       clearCart();
       setTotalCartPrice(0);
+      // Gestire una interfaccia di errore //
     }
   };
 
