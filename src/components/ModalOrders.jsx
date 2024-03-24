@@ -1,18 +1,7 @@
-import {useRef, useImperativeHandle, forwardRef} from 'react'
+import {useRef, useImperativeHandle, forwardRef} from 'react';
+import {createPortal} from 'react-dom';
 import styled from 'styled-components';
 
-export const ModalContainer = styled.dialog`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-`
 export const Title = styled.h2`
   font-weight: bold;
   font-size: 1.5rem;
@@ -28,41 +17,45 @@ export const ModalContent = styled.div`
   padding: 2rem;
   border-radius: 8px;
 `
-export const CloseButton = styled.button`
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+export const CloseModalButton = styled.button`
+  font: inherit;
+  cursor: pointer;
   background-color: transparent;
   border: none;
-  cursor: pointer;
-`
+  color: #1d1a16;
 
+  &:hover, &:active {
+    color: #312c1d;
+  }
+`
 
 const ModalOrders = forwardRef(function ModalOrders({children}, ref) {
   
-  const dialog = useRef();
+  const orderDialog = useRef();
 
   useImperativeHandle(ref, () => ({
     open: () => {
-      dialog.current.showModal();
+      orderDialog.current.showModal();
     },
   }));
 
   const handleClosing = () => {
-    dialog.current.close();
+    orderDialog.current.close();
   }
 
-  return (
-    <dialog id="modalOrders" className="modal" ref={dialog}>
+  return createPortal(
+    <dialog id="modalOrders" className="modal" ref={orderDialog}>
       <ModalContent>
         <Title>Elenco degli ordini avvenuti con successo</Title>
         <OrderList>{children}</OrderList>
-        <CloseButton onClick={handleClosing}>Close</CloseButton>
+        <CloseModalButton onClick={handleClosing}>Close</CloseModalButton>
       </ModalContent>
-    </dialog>
+    </dialog>,
+    // Montiamo il dialog nel nodo del DOM con ID 'modalOrders' (vedi index.html)
+    document.getElementById('modalOrders')
   )
 
-})
+});
 
 
 export default ModalOrders;

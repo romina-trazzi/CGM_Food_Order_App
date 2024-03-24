@@ -81,12 +81,12 @@ const Modal = forwardRef(function Modal({}, ref) {
 
   // createPortal mounts the component in a separate DOM node with id "modal"
   return createPortal(
-    <dialog id="modal" ref={dialog} className="modal">
+    <dialog id="modal"  className="modal" ref={dialog}>
       <form method="dialog" className="modal-form">
         {returnModalContent()}
       </form>
     </dialog>,
-    // Montiamo il dialog nel nodo del DOM con ID 'modal'
+    // Montiamo il dialog nel nodo del DOM con ID 'modal' (vedi index.html)
     document.getElementById('modal')
   );
       

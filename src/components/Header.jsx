@@ -68,8 +68,8 @@ function Header() {
 
     return (
         <>
-            <Modal ref={modalRef}/>
             <ModalOrders ref={modalOrdersRef}/>
+            <Modal ref={modalRef}/>
             <HeaderStyle>
             <div style={{display: "flex", alignItems: "center"}}>
                 <Logo src="logo.jpg" alt="Logo"/>
