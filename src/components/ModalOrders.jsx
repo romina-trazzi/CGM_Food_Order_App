@@ -66,10 +66,6 @@ const ModalOrders = forwardRef(function ModalOrders({isOpen, setIsOpen}, ref) {
       const successOrdersData = await fetchUserOrder();
       setSuccessOrders(successOrdersData);
       console.log(successOrdersData);
-      
-      
-      
-    
 
     } catch (error) {
       console.error('Errore durante il recupero degli ordini.', error);
@@ -80,9 +76,22 @@ const ModalOrders = forwardRef(function ModalOrders({isOpen, setIsOpen}, ref) {
     <dialog id="modalOrders" className="modal" ref={orderDialog}>
       <ModalContent>
         <Title>Elenco degli ordini avvenuti con successo</Title>
-        <OrderList>{ !isOpen ? "Carica ordini" : successOrders.map((order) => (<li key={order.id}> {order.customer.fullName} {order.customer.email} 
-        {order.customer.street} {order.customer.city} {order.customer.postalCode} <br/>
-        {order.items.name} {order.items.price} {order.items.description} {order.items.quantity}</li>))}</OrderList>
+        <OrderList>{ !isOpen ? "Carica ordini" : successOrders.map((order, id) => (
+          <li key={order.id}> 
+            <span> Nome cliente: </span>{order.customer.fullName} <br/>
+            <span> Indirizzo email: </span> {order.customer.email}
+            <span> Indirizzo di spedizione:</span>  {order.customer.street} {order.customer.city} {order.customer.postalCode} <br/>
+            <span>Ordine:</span>
+            {order.items.map((item, index) => (
+              <div key={index}>
+                <span>Nome: {item.name}</span><br />
+                <span>Descrizione: {item.description}</span><br />
+                <span>Quantità: {item.quantity}</span><br />
+                <span>Prezzo: {item.price}</span><br />
+              </div>))
+            }
+          </li>))}
+       </OrderList>
         <LoadingModalButton onClick={fetchSuccessOrders}>Load success orders</LoadingModalButton>
         <CloseModalButton onClick={handleClosing}>Close</CloseModalButton>
       </ModalContent>
@@ -100,7 +109,8 @@ export default ModalOrders;
 
 
 
-
+//   order.items.name,
+//        , , 
 
 
  
