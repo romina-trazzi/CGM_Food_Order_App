@@ -77,16 +77,13 @@ const Modal = forwardRef(function Modal({}, ref) {
     setTotalCartPrice(calculateTotalPrice());
   }, [meals]);
 
-
-
-  // createPortal mounts the component in a separate DOM node with id "modal"
+  // createPortal mounts the component in a separate DOM node with id "modal" (see index.html)
   return createPortal(
     <dialog id="modal"  className="modal" ref={dialog}>
       <form method="dialog" className="modal-form">
         {returnModalContent()}
       </form>
     </dialog>,
-    // Montiamo il dialog nel nodo del DOM con ID 'modal' (vedi index.html)
     document.getElementById('modal')
   );
       

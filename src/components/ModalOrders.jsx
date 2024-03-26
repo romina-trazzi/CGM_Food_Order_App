@@ -57,8 +57,6 @@ const ModalOrders = forwardRef(function ModalOrders({isOpen, setIsOpen}, ref) {
     setIsOpen(false);
   }
 
-  console.log(isOpen);
-
   // Fetching success orders calling orders.json
   const fetchSuccessOrders = async () => { 
     setIsOpen(true);
@@ -66,8 +64,9 @@ const ModalOrders = forwardRef(function ModalOrders({isOpen, setIsOpen}, ref) {
       const successOrdersData = await fetchUserOrder();
       
       console.log('Dati ordini di successo:', successOrdersData);
+
     } catch (error) {
-      console.error('Errore durante il recupero degli ordini:', error);
+      console.error('Errore durante il recupero degli ordini.', error);
     }
   }
 
@@ -80,7 +79,6 @@ const ModalOrders = forwardRef(function ModalOrders({isOpen, setIsOpen}, ref) {
         <CloseModalButton onClick={handleClosing}>Close</CloseModalButton>
       </ModalContent>
     </dialog>,
-    // Montiamo il dialog nel nodo del DOM con ID 'modalOrders' (vedi index.html)
     document.getElementById('modalOrders')
   )
 

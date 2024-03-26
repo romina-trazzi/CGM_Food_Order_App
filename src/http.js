@@ -18,14 +18,14 @@ export async function fetchUserOrder() {
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error('Failed to fetch meals ordered successfully. Check the error message');
+        throw new Error(response.status + ' ' + response.statusText);
     } 
 
     return data;
 }
 
 
-// Post request function (how to save orders)
+// Post request function (how to save an order)
 export async function sendUserOrder(items, customerData) {
    
     const response = await fetch('http://localhost:3000/orders', {
