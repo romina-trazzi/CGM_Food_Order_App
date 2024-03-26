@@ -10,7 +10,7 @@ export const Title = styled.h2`
 `
 export const OrderList = styled.ul `
   list-style: none;
-  margin: 0.5rem 0;
+  margin: 0;
   padding: 0;
 `
 export const ModalContent = styled.div`
@@ -24,6 +24,7 @@ export const CloseModalButton = styled.button`
   background-color: transparent;
   border: none;
   color: #1d1a16;
+  padding: 0;
 
   &:hover, &:active {
     color: #312c1d;
@@ -35,6 +36,7 @@ export const LoadingModalButton = styled.button`
   background-color: transparent;
   border: none;
   color: #1d1a16;
+  padding: 0;
 
   &:hover, &:active {
     color: #312c1d;
@@ -76,24 +78,28 @@ const ModalOrders = forwardRef(function ModalOrders({isOpen, setIsOpen}, ref) {
     <dialog id="modalOrders" className="modal" ref={orderDialog}>
       <ModalContent>
         <Title>Elenco degli ordini avvenuti con successo</Title>
-        <OrderList>{ !isOpen ? "Carica ordini" : successOrders.map((order, id) => (
+        <OrderList>{ !isOpen ? "Carica ordini" : successOrders.map((order) => (
           <li key={order.id}> 
-            <span> Nome cliente: </span>{order.customer.fullName} <br/>
-            <span> Indirizzo email: </span> {order.customer.email}
-            <span> Indirizzo di spedizione:</span>  {order.customer.street} {order.customer.city} {order.customer.postalCode} <br/>
-            <span>Ordine:</span>
+            <span><strong> Order number: </strong>{order.id} </span><br/>
+            <span><strong> Customer fullname:</strong> {order.customer.fullName} </span><br/>
+            <span><strong> Email address: </strong> {order.customer.email} </span><br/>
+            <span><strong> Address:</strong>{order.customer.street} {order.customer.city} {order.customer.postalCode} </span> <br/>
+            <span><strong> Order: </strong><br/></span>
             {order.items.map((item, index) => (
               <div key={index}>
-                <span>Nome: {item.name}</span><br />
-                <span>Descrizione: {item.description}</span><br />
-                <span>Quantità: {item.quantity}</span><br />
-                <span>Prezzo: {item.price}</span><br />
+                <span> <u> Meal name:</u> {item.name}</span><br />
+                <span> <u> Meal description:</u> {item.description}</span><br />
+                <span> <u> Meal quantity:</u> {item.quantity} </span><br />
+                <span> <u> Meal price:</u> {item.price} </span><br />
               </div>))
             }
+            <br/>
           </li>))}
-       </OrderList>
-        <LoadingModalButton onClick={fetchSuccessOrders}>Load success orders</LoadingModalButton>
-        <CloseModalButton onClick={handleClosing}>Close</CloseModalButton>
+        </OrderList>
+        <div style={{marginTop: "1rem", display: "flex", justifyContent: "flex-end", gap: "1rem"}}>
+          <LoadingModalButton onClick={fetchSuccessOrders}>Load success orders</LoadingModalButton>
+          <CloseModalButton onClick={handleClosing}>Close</CloseModalButton>
+        </div>
       </ModalContent>
     </dialog>,
     document.getElementById('modalOrders')
