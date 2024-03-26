@@ -83,7 +83,7 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
     }));
   };
 
-  // Form validation
+  // Form validation (return number of errors)
   const validateForm = () => {
     const newErrors = {};
 
@@ -127,7 +127,6 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
       
     const errorLength = Object.keys(newErrors).length;
 
-    // Aggiorna lo stato degli errori solo se ci sono errori
     if (errorLength > 0) {
       setErrors(newErrors);
     };
@@ -138,14 +137,19 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
   // Check form validation and sending data to parent compoent
   const sendModalAction = (event, buyStepAction) => {
     
-    if (buyStepAction === "success") {
+    if (buyStepAction === "result") {
       const errorNumber = validateForm();
 
       if (errorNumber === 0) {
         onSubmit(userData);
+        
+        
         setTimeout(() => {
           onHandleSetBuyStep(buyStepAction, event);
         }, 2000);
+      
+      
+      
       } else {
 
         for (const error in errors) {
@@ -157,6 +161,7 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
       }
       
     } else {
+      // Close modal
       onHandleSetBuyStep(buyStepAction, event);
     }
   }
@@ -189,7 +194,7 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
     </FormContainer>
     <RowEnd>
       <CloseModalButton type="button" onClick={(event) => sendModalAction(event, 'close')}>Close</CloseModalButton>
-      <SubmitOrderButton type="submit" onClick={(event) => sendModalAction(event, 'success')}>Submit Order</SubmitOrderButton>
+      <SubmitOrderButton type="submit" onClick={(event) => sendModalAction(event, 'result')}>Submit Order</SubmitOrderButton>
     </RowEnd>
     </>
   );

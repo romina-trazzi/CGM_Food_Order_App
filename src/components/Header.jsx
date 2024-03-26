@@ -58,8 +58,6 @@ function Header() {
     const modalOrdersRef = useRef(); 
     const [isOpen, setIsOpen] = useState(false);
 
-    console.log(isOpen);
-    
     const openCartModal = (buyStepAction) => {
         modalRef.current.open();
         modalRef.current.setBuyStep(buyStepAction);
@@ -67,8 +65,6 @@ function Header() {
 
     const openOrdersModal = () => {
         modalOrdersRef.current.open();
-        setIsOpen(true);
-        console.log(isOpen); 
     };
 
     return (

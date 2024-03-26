@@ -9,6 +9,11 @@ export const SuccessParagraph = styled.p`
   font-size: 1rem;
   line-height: 2;
 `
+export const ErrorParagraph = styled.p`
+  margin-left: 0.5rem;
+  font-size: 1rem;
+  line-height: 2;
+`
 export const OkayButton = styled.button`
   font: inherit;
   cursor: pointer;
@@ -31,7 +36,7 @@ export const ModalActions = styled.div`
 `
 
 
-function Success({title, onHandleSetBuyStep}) {
+function Result({title, isSending, onHandleSetBuyStep}) {
 
   const sendModalAction = (event, buyStepAction) => {
     onHandleSetBuyStep(buyStepAction, event);
@@ -40,8 +45,13 @@ function Success({title, onHandleSetBuyStep}) {
   return (
     <div>
       <Title style={{marginLeft: "0.5rem"}}>{title}</Title>
-      <SuccessParagraph>Your order was submittet succesfully.<br/>
-      We will get back to you with more details via email within the next few minutes.</SuccessParagraph>
+      {isSending ? 
+        <SuccessParagraph>Your order was submittet succesfully.<br/>
+        We will get back to you with more details via email within the next few minutes.</SuccessParagraph> :
+        <ErrorParagraph>We're sorry but you didn't place an order. <br/>
+        Please try again.</ErrorParagraph>
+      }
+
       <div style={{display: "flex", justifyContent: "flex-end", gap: "1rem"}}>
         <OkayButton type="button" onClick={(event) => sendModalAction(event, 'close')}>Okay</OkayButton>
       </div>
@@ -49,4 +59,4 @@ function Success({title, onHandleSetBuyStep}) {
   )
 }
 
-export default Success
+export default Result

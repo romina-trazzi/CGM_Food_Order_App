@@ -1,4 +1,4 @@
-import {useRef, useImperativeHandle, forwardRef, useEffect} from 'react';
+import {useRef, useImperativeHandle, forwardRef} from 'react';
 import {createPortal} from 'react-dom';
 import styled from 'styled-components';
 import { fetchUserOrder } from '../http.js';
@@ -29,10 +29,22 @@ export const CloseModalButton = styled.button`
     color: #312c1d;
   }
 `
+export const LoadingModalButton = styled.button`
+  font: inherit;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  color: #1d1a16;
 
-const ModalOrders = forwardRef(function ModalOrders({isOpen, setIsOpen, children}, ref) {
+  &:hover, &:active {
+    color: #312c1d;
+  }
+`
+
+const ModalOrders = forwardRef(function ModalOrders({isOpen, setIsOpen}, ref) {
   
   const orderDialog = useRef();
+
 
   useImperativeHandle(ref, () => ({
     open: () => {
@@ -45,30 +57,26 @@ const ModalOrders = forwardRef(function ModalOrders({isOpen, setIsOpen, children
     setIsOpen(false);
   }
 
+  console.log(isOpen);
+
   // Fetching success orders calling orders.json
-  const fetchSuccessOrders = async () => {
+  const fetchSuccessOrders = async () => { 
+    setIsOpen(true);
     try {
       const successOrdersData = await fetchUserOrder();
-      console.log(successOrdersData);
-      setIsOpen(false);
-
+      
+      console.log('Dati ordini di successo:', successOrdersData);
     } catch (error) {
-      console.error('Error fetching meals successfully ordered:', error);
+      console.error('Errore durante il recupero degli ordini:', error);
     }
-
   }
-
-
-  // Getting success orders
-  useEffect(() => {
-    fetchSuccessOrders();
-  }, [isOpen]);
 
   return createPortal(
     <dialog id="modalOrders" className="modal" ref={orderDialog}>
       <ModalContent>
         <Title>Elenco degli ordini avvenuti con successo</Title>
-        <OrderList>{children}</OrderList>
+        <OrderList>{ !isOpen ? "Carica ordini" : "Dati degli ordini"}</OrderList>
+        <LoadingModalButton onClick={fetchSuccessOrders}>Load success orders</LoadingModalButton>
         <CloseModalButton onClick={handleClosing}>Close</CloseModalButton>
       </ModalContent>
     </dialog>,

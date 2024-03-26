@@ -5,11 +5,25 @@ export async function fetchMeals() {
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error('Failed to fetch meals. Check the URL address');
+        throw new Error('Failed to fetch meals. Check the error message');
     }
 
     return data
 }
+
+
+// Get request function (fetch total user orders)
+export async function fetchUserOrder() {
+    const response = await fetch('http://localhost:3000/orders');
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch meals ordered successfully. Check the error message');
+    } 
+
+    return data;
+}
+
 
 // Post request function (how to save orders)
 export async function sendUserOrder(items, customerData) {
@@ -31,17 +45,7 @@ export async function sendUserOrder(items, customerData) {
     return resData.message;
 }
 
-// Get request function (fetch total user orders)
-export async function fetchUserOrder() {
 
-    const response = await fetch('http://localhost:5173/orders');
-    const data = await response.json();
 
-    if (!response.ok) {
-        throw new Error('Failed to fetch meals ordered successfully. Check the error message');
-    } 
 
-    return data;
-
-}
 

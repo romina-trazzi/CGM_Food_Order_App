@@ -2,7 +2,7 @@ import { forwardRef, useImperativeHandle, useRef, useState, useContext, useEffec
 import { createPortal } from 'react-dom';
 import Cart from './Cart';
 import CheckOutForm from './CheckOutForm'
-import Success from './Success'
+import Result from './Result.jsx'
 import { CartContext } from './store/shoppingCartContext.jsx';
 import { sendUserOrder } from '../http.js'
 
@@ -13,7 +13,7 @@ const Modal = forwardRef(function Modal({}, ref) {
   const cartMealsQuantity = meals.length;
   const [totalCartPrice, setTotalCartPrice] = useState(0);
   const [buyStep, setBuyStep] = useState("openCart");
-
+  const [isSending, setIsSending] = useState(false);
 
   
   useImperativeHandle(ref, () => {
@@ -46,13 +46,13 @@ const Modal = forwardRef(function Modal({}, ref) {
   const handleFormSubmit = async (userDataFromChild) => {
     try {
       await sendUserOrder(meals, userDataFromChild);
+      setIsSending(true);
       clearCart();
       setTotalCartPrice(0);
-      
     } catch (error) {
       clearCart();
       setTotalCartPrice(0);
-      // Gestire una interfaccia di errore //
+      setIsSending(false);
     }
   };
 
@@ -62,8 +62,8 @@ const Modal = forwardRef(function Modal({}, ref) {
         return <Cart title="Your Cart" totalCartPrice={totalCartPrice} cartMealsQuantity={cartMealsQuantity} onHandleSetBuyStep={handleSetBuyStep}/>;
       case "openCheckout":
         return <CheckOutForm title="Checkout" totalCartPrice={totalCartPrice} onHandleSetBuyStep={handleSetBuyStep} onSubmit={handleFormSubmit}/>;
-      case "success":
-        return <Success title="Success" onHandleSetBuyStep={handleSetBuyStep}/>;
+      case "result":
+        return <Result title={isSending ? "Success" : "Error"} onHandleSetBuyStep={handleSetBuyStep} isSending={isSending}/>;
       default:
         return <Cart title="Your Cart" totalCartPrice={totalCartPrice} cartMealsQuantity={cartMealsQuantity} onHandleSetBuyStep={handleSetBuyStep}/>;
     }
