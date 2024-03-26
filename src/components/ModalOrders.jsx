@@ -1,4 +1,4 @@
-import {useRef, useImperativeHandle, forwardRef} from 'react';
+import {useRef, useImperativeHandle, forwardRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import styled from 'styled-components';
 import { fetchUserOrder } from '../http.js';
@@ -42,6 +42,8 @@ export const LoadingModalButton = styled.button`
 `
 
 const ModalOrders = forwardRef(function ModalOrders({isOpen, setIsOpen}, ref) {
+
+  const [successOrders, setSuccessOrders] = useState([]);
   
   const orderDialog = useRef();
 
@@ -62,8 +64,12 @@ const ModalOrders = forwardRef(function ModalOrders({isOpen, setIsOpen}, ref) {
     setIsOpen(true);
     try {
       const successOrdersData = await fetchUserOrder();
+      setSuccessOrders(successOrdersData);
+      console.log(successOrdersData);
       
-      console.log('Dati ordini di successo:', successOrdersData);
+      
+      
+    
 
     } catch (error) {
       console.error('Errore durante il recupero degli ordini.', error);
@@ -74,7 +80,9 @@ const ModalOrders = forwardRef(function ModalOrders({isOpen, setIsOpen}, ref) {
     <dialog id="modalOrders" className="modal" ref={orderDialog}>
       <ModalContent>
         <Title>Elenco degli ordini avvenuti con successo</Title>
-        <OrderList>{ !isOpen ? "Carica ordini" : "Dati degli ordini"}</OrderList>
+        <OrderList>{ !isOpen ? "Carica ordini" : successOrders.map((order) => (<li key={order.id}> {order.customer.fullName} {order.customer.email} 
+        {order.customer.street} {order.customer.city} {order.customer.postalCode} <br/>
+        {order.items.name} {order.items.price} {order.items.description} {order.items.quantity}</li>))}</OrderList>
         <LoadingModalButton onClick={fetchSuccessOrders}>Load success orders</LoadingModalButton>
         <CloseModalButton onClick={handleClosing}>Close</CloseModalButton>
       </ModalContent>
