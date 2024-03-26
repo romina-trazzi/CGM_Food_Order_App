@@ -1,6 +1,7 @@
-import {useRef, useImperativeHandle, forwardRef} from 'react';
+import {useRef, useImperativeHandle, forwardRef, useEffect} from 'react';
 import {createPortal} from 'react-dom';
 import styled from 'styled-components';
+import { fetchUserOrder } from '../http.js';
 
 export const Title = styled.h2`
   font-weight: bold;
@@ -29,7 +30,7 @@ export const CloseModalButton = styled.button`
   }
 `
 
-const ModalOrders = forwardRef(function ModalOrders({children}, ref) {
+const ModalOrders = forwardRef(function ModalOrders({isOpen, setIsOpen, children}, ref) {
   
   const orderDialog = useRef();
 
@@ -41,7 +42,27 @@ const ModalOrders = forwardRef(function ModalOrders({children}, ref) {
 
   const handleClosing = () => {
     orderDialog.current.close();
+    setIsOpen(false);
   }
+
+  // Fetching success orders calling orders.json
+  const fetchSuccessOrders = async () => {
+    try {
+      const successOrdersData = await fetchUserOrder();
+      console.log(successOrdersData);
+      setIsOpen(false);
+
+    } catch (error) {
+      console.error('Error fetching meals successfully ordered:', error);
+    }
+
+  }
+
+
+  // Getting success orders
+  useEffect(() => {
+    fetchSuccessOrders();
+  }, [isOpen]);
 
   return createPortal(
     <dialog id="modalOrders" className="modal" ref={orderDialog}>

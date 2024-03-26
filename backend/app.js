@@ -90,6 +90,7 @@ app.use((req, res) => {
 app.get("/orders", async (req, res) => {
   try {
     const orders = await fs.readFile("./data/orders.json", "utf8");
+    console.log("Contenuto del file orders.json:", orders);
     res.json(JSON.parse(orders));
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });

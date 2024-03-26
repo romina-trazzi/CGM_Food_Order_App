@@ -56,6 +56,9 @@ function Header() {
     const cartMealsQuantity = meals.length;
     const modalRef = useRef();
     const modalOrdersRef = useRef(); 
+    const [isOpen, setIsOpen] = useState(false);
+
+    console.log(isOpen);
     
     const openCartModal = (buyStepAction) => {
         modalRef.current.open();
@@ -64,11 +67,13 @@ function Header() {
 
     const openOrdersModal = () => {
         modalOrdersRef.current.open();
+        setIsOpen(true);
+        console.log(isOpen); 
     };
 
     return (
         <>
-            <ModalOrders ref={modalOrdersRef}/>
+            <ModalOrders ref={modalOrdersRef} isOpen={isOpen} setIsOpen={setIsOpen}/>
             <Modal ref={modalRef}/>
             <HeaderStyle>
             <div style={{display: "flex", alignItems: "center"}}>

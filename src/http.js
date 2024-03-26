@@ -33,15 +33,15 @@ export async function sendUserOrder(items, customerData) {
 
 // Get request function (fetch total user orders)
 export async function fetchUserOrder() {
-    
-    const response = await fetch('http://localhost:3000/orders');
+
+    const response = await fetch('http://localhost:5173/orders');
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error('Failed to fetch meals order. Check the URL address');
-    }
+        throw new Error('Failed to fetch meals ordered successfully. Check the error message');
+    } 
 
-    return data
+    return data;
+
 }
-
 
