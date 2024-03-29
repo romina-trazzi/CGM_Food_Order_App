@@ -4,6 +4,6 @@ It's an interactive shopping cart that employs the following functionalities:
   * Components, JSX syntax, Conditional rendering of CSS classes, and lists;
   * Styled components
   * useState and useEffect hooks
-  * useRef, forwardRef, createPortals
+  * useRef, forwardRef, useImperativeHandle, createPortals
   * useContext, useReducer
   * GET and POST requests"
