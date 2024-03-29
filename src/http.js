@@ -11,7 +11,6 @@ export async function fetchMeals() {
     return data
 }
 
-
 // Get request function (fetch total user orders)
 export async function fetchUserOrder() {
     const response = await fetch('http://localhost:3000/orders');

@@ -143,13 +143,10 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
       if (errorNumber === 0) {
         onSubmit(userData);
         
-        
         setTimeout(() => {
           onHandleSetBuyStep(buyStepAction, event);
         }, 1000);
-      
-      
-      
+    
       } else {
 
         for (const error in errors) {

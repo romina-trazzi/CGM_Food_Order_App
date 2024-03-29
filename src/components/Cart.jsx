@@ -93,26 +93,17 @@ function Cart({title, totalCartPrice, cartMealsQuantity, onHandleSetBuyStep}) {
 
   const handleIncrementQuantity = (event, mealId) => {
     event.preventDefault();
-    
-    // Aggiorna q.tà pasto selezionato +1
     updateMealQuantity(mealId, 1);
-  
   };
 
   const handleDecrementQuantity = (event, mealId) => {
     event.preventDefault();
-    
-    // Seleziona il pasto da aggiornare
     const mealToUpdate = meals.find(meal => meal.id === mealId);
     
-    // Se il pasto esiste e la sua quantità è pari a zero rimuovilo dal carrello filtrando l'array meals
     if (mealToUpdate && mealToUpdate.quantity === 0) {
-
-      // Filtra ed elimina i pasti con q.tà 0
       const updatedMeals = meals.filter(meal => meal.id !== mealId);
       updateMealQuantity(updatedMeals);
     } else {
-      // Altrimenti aggiorna q.tà pasto selezionato -1
       updateMealQuantity(mealId, -1);
     }
   };

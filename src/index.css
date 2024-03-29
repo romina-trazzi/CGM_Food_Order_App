@@ -14,50 +14,6 @@ body {
   min-height: 100vh;
 }
 
-/* Header component */
-h1 {
-  font-family: 'Lato', sans-serif;
-  font-weight: 700;
-  font-size: 2rem;
-  margin: 0;
-  color: #ffc404;
-  letter-spacing: 0.2rem;
-  text-transform: uppercase;
-}
-
-/* Cart component */
-
-.cart-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0.5rem 0;
-}
-
-.cart-item p {
-  margin: 0;
-}
-
-.cart-item-actions {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-/* Form component */
-
-.text-button {
-  font: inherit;
-  cursor: pointer;
-  background-color: transparent;
-  border: none;
-  color: #ffc404;
-}
-
-.text-button:hover,
-.text-button:active {
-  color: #ffab04;
-}
 
 /* Modal component */
 .modal {

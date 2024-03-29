@@ -26,7 +26,6 @@ export const MealData = styled.span`
   margin: 0.5rem;  
   display: block;
 `
-
 export const CloseModalButton = styled.button`
   font: inherit;
   cursor: pointer;
@@ -103,18 +102,6 @@ const ModalOrders = forwardRef(function ModalOrders({isOpen, setIsOpen}, ref) {
             }
             <br/>
           </li>))}
-
-
-
-           
-     
-
-
-
-
-          
-         
-     
         </OrderList>
         <div style={{marginTop: "1rem", display: "flex", justifyContent: "flex-end", gap: "1rem"}}>
           <LoadingModalButton onClick={fetchSuccessOrders}>Load success orders</LoadingModalButton>
@@ -124,7 +111,6 @@ const ModalOrders = forwardRef(function ModalOrders({isOpen, setIsOpen}, ref) {
     </dialog>,
     document.getElementById('modalOrders')
   )
-
 });
 
 

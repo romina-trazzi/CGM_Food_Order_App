@@ -35,7 +35,6 @@ export const ModalActions = styled.div`
   gap: 1rem;
 `
 
-
 function Result({title, isSending, onHandleSetBuyStep}) {
 
   const sendModalAction = (event, buyStepAction) => {
