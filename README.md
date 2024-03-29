@@ -1,0 +1,9 @@
+This is the final project of my 248-hour React course.
+It's an interactive shopping cart that employs the following functionalities:
+
+  * Components, JSX syntax, Conditional rendering of CSS classes, and lists;
+  * Styled components
+  * useState and useEffect hooks
+  * useRef, forwardRef, createPortals
+  * useContext, useReducer
+  * GET and POST requests"
