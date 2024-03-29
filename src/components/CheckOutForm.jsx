@@ -106,7 +106,7 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
     }
 
     // Address validation
-    const addressPattern = /^(Via|Viale|Piazza|Corso|Largo)\s[A-Za-zÀ-ÖØ-öø-ÿ]+\s\d+$/;
+    const addressPattern = /^(Via|Viale|Piazza|Corso|Largo)\s[A-Za-zÀ-ÖØ-öø-ÿ\s]+\s\d+$/;
     if (userData.street.trim() === "") {
       newErrors.street = "Inserisci il tuo indirizzo";
     } else if(!addressPattern.test(userData.street)) {
@@ -146,7 +146,7 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
         
         setTimeout(() => {
           onHandleSetBuyStep(buyStepAction, event);
-        }, 2000);
+        }, 1000);
       
       
       
@@ -154,8 +154,7 @@ function CheckOutForm({title, totalCartPrice, onSubmit, onHandleSetBuyStep}) {
 
         for (const error in errors) {
           if (errors.hasOwnProperty(error)) {
-            // alert("Il campo errato è: " + error + " " + errors[error]);
-
+            alert("Il campo errato è: " + error + " " + errors[error]);
           }
         }
       }

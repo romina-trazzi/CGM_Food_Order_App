@@ -109,15 +109,3 @@ const ModalOrders = forwardRef(function ModalOrders({isOpen, setIsOpen}, ref) {
 
 
 export default ModalOrders;
-
-
-
-
-
-
-//   order.items.name,
-//        , , 
-
-
- 
-
