@@ -3,21 +3,30 @@ import {createPortal} from 'react-dom';
 import styled from 'styled-components';
 import { fetchUserOrder } from '../http.js';
 
-export const Title = styled.h2`
-  font-weight: bold;
-  font-size: 1.5rem;
-  margin: 1rem 0;
-`
-export const OrderList = styled.ul `
-  list-style: none;
-  margin: 0;
-  padding: 0;
-`
 export const ModalContent = styled.div`
   background-color: white;
   padding: 2rem;
   border-radius: 8px;
 `
+export const Title = styled.h2`
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin: 1rem 0;
+`
+export const OrderList = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+`
+export const CustomerData = styled.span`
+  margin: 0.5rem;
+  display: block;
+`
+export const MealData = styled.span`
+  margin: 0.5rem;  
+  display: block;
+`
+
 export const CloseModalButton = styled.button`
   font: inherit;
   cursor: pointer;
@@ -46,7 +55,6 @@ export const LoadingModalButton = styled.button`
 const ModalOrders = forwardRef(function ModalOrders({isOpen, setIsOpen}, ref) {
 
   const [successOrders, setSuccessOrders] = useState([]);
-  
   const orderDialog = useRef();
 
 
@@ -79,22 +87,34 @@ const ModalOrders = forwardRef(function ModalOrders({isOpen, setIsOpen}, ref) {
       <ModalContent>
         <Title>Elenco degli ordini avvenuti con successo</Title>
         <OrderList>{ !isOpen ? "Carica ordini" : successOrders.map((order) => (
-          <li key={order.id}> 
-            <span><strong> Order number: </strong>{order.id} </span><br/>
-            <span><strong> Customer fullname:</strong> {order.customer.fullName} </span><br/>
-            <span><strong> Email address: </strong> {order.customer.email} </span><br/>
-            <span><strong> Address:</strong>{order.customer.street} {order.customer.city} {order.customer.postalCode} </span> <br/>
-            <span><strong> Order: </strong><br/></span>
+          <li key={order.id} style={{border: "1px solid black", padding: "1rem", marginBottom: "1rem"}}> 
+            <div><strong> Order number: {order.id} </strong></div><br/>
+            <CustomerData> Customer fullname: {order.customer.fullName} </CustomerData>
+            <CustomerData> Email address: {order.customer.email} </CustomerData>
+            <CustomerData> Address: {order.customer.street} {order.customer.city} {order.customer.postalCode} </CustomerData>
+            <br/><div><strong> Order: </strong></div><br/>
             {order.items.map((item, index) => (
               <div key={index}>
-                <span> <u> Meal name:</u> {item.name}</span><br />
-                <span> <u> Meal description:</u> {item.description}</span><br />
-                <span> <u> Meal quantity:</u> {item.quantity} </span><br />
-                <span> <u> Meal price:</u> {item.price} </span><br />
+                <MealData>Meal name: {item.name} </MealData>
+                <MealData>Meal description: {item.description} </MealData>
+                <MealData>Meal quantity: {item.quantity} </MealData>
+                <MealData>Meal price: {item.price} </MealData>
               </div>))
             }
             <br/>
           </li>))}
+
+
+
+           
+     
+
+
+
+
+          
+         
+     
         </OrderList>
         <div style={{marginTop: "1rem", display: "flex", justifyContent: "flex-end", gap: "1rem"}}>
           <LoadingModalButton onClick={fetchSuccessOrders}>Load success orders</LoadingModalButton>
