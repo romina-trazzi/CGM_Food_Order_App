@@ -23,7 +23,6 @@ export async function fetchUserOrder() {
     return data;
 }
 
-
 // Post request function (how to save an order)
 export async function sendUserOrder(items, customerData) {
    

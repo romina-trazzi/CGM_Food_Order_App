@@ -18,16 +18,23 @@ function shoppingCartReducer(state, action) {
 
     const selectedMeal = action.payload;
     const existingMealIndex = state.meals.findIndex(meal => meal.id === selectedMeal.id);
-
-        if (existingMealIndex !== -1) {
-
-            const updatedMeals = [...state.meals];
-            updatedMeals[existingMealIndex].quantity += 1;
-            
-            return {
+    
+    if (existingMealIndex !== -1) {
+        
+        const updatedMeals = state.meals.map((meal, index) => {
+            if (index === existingMealIndex) {
+                return {
+                    ...meal,
+                    quantity: meal.quantity + 1
+                };
+            }
+            return meal;
+        });
+ 
+        return {
             ...state,
             meals: updatedMeals
-            };
+        };
 
 
         } else {
